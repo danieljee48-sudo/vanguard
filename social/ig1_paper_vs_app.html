@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1080px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f9fa; }
+  .canvas { width: 1080px; height: 1080px; display: grid; grid-template-columns: 1fr 1fr; }
+
+  .left { background: #1A2744; padding: 64px 52px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+  .left-bg { position: absolute; bottom: -80px; right: -80px; width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,0.03); }
+  .right { background: #0D7377; padding: 64px 52px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+  .right-bg { position: absolute; top: -80px; left: -80px; width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,0.06); }
+
+  .col-label { font-size: 13px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; padding: 10px 18px; border-radius: 8px; display: inline-block; margin-bottom: 32px; }
+  .left .col-label { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+  .right .col-label { background: rgba(255,255,255,0.15); color: white; }
+
+  .col-title { font-size: 52px; font-weight: 800; line-height: 1.05; margin-bottom: 40px; }
+  .left .col-title { color: rgba(255,255,255,0.35); }
+  .right .col-title { color: white; }
+
+  .item-list { display: flex; flex-direction: column; gap: 18px; flex: 1; }
+  .item { display: flex; align-items: flex-start; gap: 14px; }
+  .item-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .left .item-icon { background: rgba(255,255,255,0.06); }
+  .right .item-icon { background: rgba(255,255,255,0.15); }
+  .item-icon svg { width: 16px; height: 16px; }
+  .item-text { font-size: 19px; line-height: 1.35; }
+  .left .item-text { color: rgba(255,255,255,0.45); }
+  .right .item-text { color: white; font-weight: 500; }
+
+  .col-bottom { margin-top: 40px; }
+  .left .verdict { font-size: 15px; color: rgba(255,255,255,0.2); font-style: italic; }
+  .right .verdict { font-size: 15px; color: rgba(255,255,255,0.7); }
+
+  .logo-strip { position: absolute; bottom: 0; left: 0; right: 0; height: 56px; background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .logo-strip-icon { width: 26px; height: 26px; background: #0D7377; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+  .logo-strip-icon svg { width: 15px; height: 15px; }
+  .logo-strip-text { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 1px; }
+
+  .vs-badge { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; width: 64px; height: 64px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+  .vs-badge span { font-size: 18px; font-weight: 900; color: #1A2744; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="left">
+    <div class="left-bg"></div>
+    <div>
+      <div class="col-label">Before</div>
+      <div class="col-title">Paper &<br/>clipboard</div>
+    </div>
+    <div class="item-list">
+      <div class="item">
+        <div class="item-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 8L13 3M3 13L8 8" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="item-text">Sheets lost between services</div>
+      </div>
+      <div class="item">
+        <div class="item-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 8L13 3M3 13L8 8" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="item-text">Illegible writing in a rush</div>
+      </div>
+      <div class="item">
+        <div class="item-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 8L13 3M3 13L8 8" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="item-text">No idea where last month's records are</div>
+      </div>
+      <div class="item">
+        <div class="item-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 8L13 3M3 13L8 8" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="item-text">EHO visits and your stomach drops</div>
+      </div>
+      <div class="item">
+        <div class="item-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 8L13 3M3 13L8 8" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="item-text">Printing new sheets every week</div>
+      </div>
+    </div>
+    <div class="col-bottom">
+      <div class="verdict">Sound familiar?</div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="right-bg"></div>
+    <div>
+      <div class="col-label">VanGuard</div>
+      <div class="col-title">Your phone.<br/>All done.</div>
+    </div>
+    <div class="item-list">
+      <div class="item">
+        <div class="item-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-text">All records saved automatically</div>
+      </div>
+      <div class="item">
+        <div class="item-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-text">Tap through checks in seconds</div>
+      </div>
+      <div class="item">
+        <div class="item-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-text">Months of history, always searchable</div>
+      </div>
+      <div class="item">
+        <div class="item-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-text">One tap = full EHO audit PDF</div>
+      </div>
+      <div class="item">
+        <div class="item-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8L6.5 11.5L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-text">Free to try — no download needed</div>
+      </div>
+    </div>
+    <div class="col-bottom">
+      <div class="verdict">vanguardapp.co.uk</div>
+    </div>
+  </div>
+
+  <div class="vs-badge"><span>VS</span></div>
+</div>
+</body>
+</html>

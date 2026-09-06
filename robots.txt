@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+# The app shell is a JS bundle, not useful in search results
+Disallow: /app
+Disallow: /app/
+
+Sitemap: https://vanguardapp.co.uk/sitemap.xml

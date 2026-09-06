@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1080px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1A2744; }
+  .canvas { width: 1080px; height: 1080px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 64px 80px; }
+
+  .bg-accent { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #0D7377, #4FC3C7, #0D7377); }
+
+  .logo-row { display: flex; align-items: center; gap: 12px; position: absolute; top: 52px; left: 80px; }
+  .logo-icon { width: 40px; height: 40px; background: #0D7377; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .logo-icon svg { width: 22px; height: 22px; }
+  .logo-text { font-size: 18px; font-weight: 800; color: white; letter-spacing: 1px; }
+
+  .main { display: flex; align-items: center; gap: 64px; width: 100%; }
+  .left { flex: 1; }
+
+  .alert-box { display: flex; align-items: flex-start; gap: 14px; background: rgba(239,68,68,0.1); border: 1.5px solid rgba(239,68,68,0.3); border-radius: 16px; padding: 20px 22px; margin-bottom: 36px; }
+  .alert-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+  .alert-text { font-size: 18px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+  .alert-text strong { color: #fca5a5; display: block; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+  h1 { font-size: 66px; font-weight: 800; color: white; line-height: 1.0; margin-bottom: 20px; }
+  h1 .teal { color: #0D7377; }
+  .sub { font-size: 20px; color: rgba(255,255,255,0.55); line-height: 1.5; margin-bottom: 36px; }
+
+  .checklist { display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
+  .cl-item { display: flex; align-items: center; gap: 12px; }
+  .cl-check { width: 28px; height: 28px; background: rgba(13,115,119,0.2); border: 1.5px solid #0D7377; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .cl-check svg { width: 14px; height: 14px; }
+  .cl-text { font-size: 18px; color: rgba(255,255,255,0.8); }
+
+  .cta-row { display: flex; align-items: center; gap: 14px; }
+  .cta-btn { background: #0D7377; border-radius: 100px; padding: 16px 32px; font-size: 18px; font-weight: 700; color: white; }
+  .cta-url { font-size: 16px; color: rgba(255,255,255,0.4); }
+
+  /* Right: phone */
+  .phone-wrap { flex-shrink: 0; }
+  .phone-frame { width: 280px; height: 540px; background: #0C1628; border-radius: 36px; border: 2px solid rgba(255,255,255,0.1); padding: 14px; overflow: hidden; }
+  .phone-notch { width: 80px; height: 22px; background: #1A2744; border-radius: 0 0 14px 14px; margin: 0 auto 12px; }
+
+  .eho-screen { }
+  .eho-top { background: #0D7377; border-radius: 10px; padding: 12px; margin-bottom: 8px; text-align: center; }
+  .eho-top-label { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.5px; }
+  .eho-top-title { font-size: 14px; font-weight: 800; color: white; margin-top: 2px; }
+  .eho-top-date { font-size: 9px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+  .score-row { display: flex; gap: 6px; margin-bottom: 8px; }
+  .score-card { flex: 1; background: #1A2744; border-radius: 8px; padding: 8px; text-align: center; }
+  .score-num { font-size: 18px; font-weight: 800; color: #22c55e; }
+  .score-label { font-size: 8px; color: rgba(255,255,255,0.4); margin-top: 1px; }
+
+  .section-title { font-size: 8px; font-weight: 700; color: #0D7377; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; margin-top: 8px; }
+  .mini-row { display: flex; justify-content: space-between; align-items: center; background: #1A2744; border-radius: 6px; padding: 6px 8px; margin-bottom: 4px; }
+  .mini-label { font-size: 9px; color: rgba(255,255,255,0.6); }
+  .mini-pass { font-size: 8px; font-weight: 700; color: #22c55e; background: rgba(34,197,94,0.1); border-radius: 4px; padding: 2px 5px; }
+  .mini-temp { font-size: 11px; font-weight: 800; color: #22c55e; }
+
+  .pdf-btn { background: #0D7377; border-radius: 8px; padding: 9px; text-align: center; margin-top: 8px; }
+  .pdf-btn-text { font-size: 9px; font-weight: 700; color: white; }
+  .pdf-btn-sub { font-size: 8px; color: rgba(255,255,255,0.6); margin-top: 1px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="bg-accent"></div>
+
+  <div class="logo-row">
+    <div class="logo-icon">
+      <svg viewBox="0 0 22 22" fill="none">
+        <path d="M11 2L18 5.5V10C18 13.7 15.2 17 11 18.5C6.8 17 4 13.7 4 10V5.5L11 2Z" fill="white"/>
+        <path d="M7.5 10.5L10 13L14.5 8" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="logo-text">VANGUARD</span>
+  </div>
+
+  <div class="main">
+    <div class="left">
+      <div class="alert-box">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-text">
+          <strong>Sound familiar?</strong>
+          "The EHO just turned up and I couldn't find any of my paperwork..."
+        </div>
+      </div>
+
+      <h1>Be ready<br/>for any<br/><span class="teal">inspection.</span></h1>
+      <p class="sub">VanGuard keeps all your records in one place — always up to date, always on your phone.</p>
+
+      <div class="checklist">
+        <div class="cl-item">
+          <div class="cl-check"><svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 3.5" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="cl-text">Months of temperature records</span>
+        </div>
+        <div class="cl-item">
+          <div class="cl-check"><svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 3.5" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="cl-text">Cleaning logs with dates</span>
+        </div>
+        <div class="cl-item">
+          <div class="cl-check"><svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 3.5" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="cl-text">LPG & van safety checks</span>
+        </div>
+        <div class="cl-item">
+          <div class="cl-check"><svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 3.5" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span class="cl-text">One-tap PDF report — instantly</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <div class="cta-btn">Try free today</div>
+        <div class="cta-url">vanguardapp.co.uk</div>
+      </div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="eho-screen">
+          <div class="eho-top">
+            <div class="eho-top-label">EHO Audit Pack</div>
+            <div class="eho-top-title">Daniel's Burger Van</div>
+            <div class="eho-top-date">Generated 26 June 2026 · 14:32</div>
+          </div>
+          <div class="score-row">
+            <div class="score-card"><div class="score-num">28</div><div class="score-label">Days recorded</div></div>
+            <div class="score-card"><div class="score-num">100%</div><div class="score-label">Checks done</div></div>
+          </div>
+          <div class="section-title">Temperature records — today</div>
+          <div class="mini-row"><span class="mini-label">Fridge 1</span><span class="mini-temp">3°C</span></div>
+          <div class="mini-row"><span class="mini-label">Hot hold</span><span class="mini-temp">72°C</span></div>
+          <div class="mini-row"><span class="mini-label">Freezer</span><span class="mini-temp">-18°C</span></div>
+          <div class="section-title">Compliance checks</div>
+          <div class="mini-row"><span class="mini-label">Opening checks</span><span class="mini-pass">COMPLETE</span></div>
+          <div class="mini-row"><span class="mini-label">Cleaning log</span><span class="mini-pass">COMPLETE</span></div>
+          <div class="mini-row"><span class="mini-label">LPG check</span><span class="mini-pass">COMPLETE</span></div>
+          <div class="pdf-btn">
+            <div class="pdf-btn-text">Download PDF Report</div>
+            <div class="pdf-btn-sub">Print-ready for EHO inspection</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

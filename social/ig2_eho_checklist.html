@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1080px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0fafa; }
+  .canvas { width: 1080px; height: 1080px; display: flex; flex-direction: column; padding: 68px 80px; }
+
+  .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 48px; }
+  .logo-row { display: flex; align-items: center; gap: 12px; }
+  .logo-icon { width: 44px; height: 44px; background: #0D7377; border-radius: 11px; display: flex; align-items: center; justify-content: center; }
+  .logo-icon svg { width: 26px; height: 26px; }
+  .logo-text { font-size: 20px; font-weight: 800; color: #1A2744; letter-spacing: 1px; }
+  .save-tag { font-size: 13px; font-weight: 700; color: #0D7377; background: rgba(13,115,119,0.1); border: 1px solid rgba(13,115,119,0.2); border-radius: 8px; padding: 8px 16px; }
+
+  .headline { font-size: 52px; font-weight: 800; color: #1A2744; line-height: 1.05; margin-bottom: 10px; }
+  .headline .teal { color: #0D7377; }
+  .subline { font-size: 20px; color: #6b7280; margin-bottom: 44px; }
+
+  .checklist { display: flex; flex-direction: column; gap: 0; flex: 1; }
+  .cl-item { display: flex; align-items: center; gap: 20px; padding: 20px 24px; border-radius: 16px; margin-bottom: 10px; }
+  .cl-item.done { background: white; border: 1.5px solid #e6f6f6; }
+  .cl-item.warn { background: #fff9f0; border: 1.5px solid #fed7aa; }
+  .cl-num { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+  .cl-num.teal { background: #0D7377; color: white; }
+  .cl-num.orange { background: #f59e0b; color: white; }
+  .cl-content { flex: 1; }
+  .cl-title { font-size: 20px; font-weight: 700; color: #1A2744; }
+  .cl-sub { font-size: 14px; color: #6b7280; margin-top: 3px; }
+  .cl-badge { flex-shrink: 0; font-size: 12px; font-weight: 700; border-radius: 8px; padding: 6px 14px; }
+  .cl-badge.green { background: #dcfce7; color: #15803d; }
+  .cl-badge.orange { background: #fef3c7; color: #92400e; }
+
+  .bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; }
+  .vg-pill { background: #0D7377; border-radius: 100px; padding: 16px 32px; display: flex; align-items: center; gap: 10px; }
+  .vg-pill-icon { width: 24px; height: 24px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+  .vg-pill-icon svg { width: 14px; height: 14px; }
+  .vg-pill-text { font-size: 17px; font-weight: 700; color: white; }
+  .bottom-note { font-size: 15px; color: #9ca3af; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="top">
+    <div class="logo-row">
+      <div class="logo-icon">
+        <svg viewBox="0 0 26 26" fill="none">
+          <path d="M13 3L21 7V12C21 16.4 17.5 20.4 13 22C8.5 20.4 5 16.4 5 12V7L13 3Z" fill="white"/>
+          <path d="M9 13L12 16L17 10" stroke="#0D7377" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="logo-text">VANGUARD</span>
+    </div>
+    <div class="save-tag">Save this post</div>
+  </div>
+
+  <div class="headline">What EHOs actually<br/>check when they<br/>visit your <span class="teal">van.</span></div>
+  <div class="subline">5 things they want to see documented — every single service.</div>
+
+  <div class="checklist">
+    <div class="cl-item done">
+      <div class="cl-num teal">1</div>
+      <div class="cl-content">
+        <div class="cl-title">Temperature records</div>
+        <div class="cl-sub">Fridge, freezer, hot hold & probe temps — logged daily</div>
+      </div>
+      <div class="cl-badge green">VanGuard ✓</div>
+    </div>
+    <div class="cl-item done">
+      <div class="cl-num teal">2</div>
+      <div class="cl-content">
+        <div class="cl-title">Cleaning schedule</div>
+        <div class="cl-sub">What was cleaned, when, and by who</div>
+      </div>
+      <div class="cl-badge green">VanGuard ✓</div>
+    </div>
+    <div class="cl-item done">
+      <div class="cl-num teal">3</div>
+      <div class="cl-content">
+        <div class="cl-title">Opening & closing checks</div>
+        <div class="cl-sub">Van condition, handwashing, food storage — logged every service</div>
+      </div>
+      <div class="cl-badge green">VanGuard ✓</div>
+    </div>
+    <div class="cl-item done">
+      <div class="cl-num teal">4</div>
+      <div class="cl-content">
+        <div class="cl-title">LPG gas safety</div>
+        <div class="cl-sub">Cylinder checks, connections, ventilation — documented</div>
+      </div>
+      <div class="cl-badge green">VanGuard ✓</div>
+    </div>
+    <div class="cl-item warn">
+      <div class="cl-num orange">5</div>
+      <div class="cl-content">
+        <div class="cl-title">Months of consistent records</div>
+        <div class="cl-sub">Not just today — they want to see a pattern of compliance</div>
+      </div>
+      <div class="cl-badge orange">Paper? Good luck</div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="vg-pill">
+      <div class="vg-pill-icon">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M7 1.5L12 4V7C12 9.7 9.8 12.1 7 13C4.2 12.1 2 9.7 2 7V4L7 1.5Z" fill="white"/></svg>
+      </div>
+      <div class="vg-pill-text">vanguardapp.co.uk — free to try</div>
+    </div>
+    <div class="bottom-note">No download needed</div>
+  </div>
+</div>
+</body>
+</html>

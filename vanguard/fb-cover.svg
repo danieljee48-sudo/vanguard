@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 312" width="820" height="312">
+  <!-- Background -->
+  <rect width="820" height="312" fill="#1A2744"/>
+
+  <!-- Left accent bar -->
+  <rect x="0" y="0" width="5" height="312" fill="#0D7377" opacity="0.8"/>
+
+  <!-- Decorative shield outline (right side) -->
+  <path d="M 590 28 H 800 V 210 Q 800 282 695 308 Q 590 282 590 210 Z"
+        fill="rgba(13,115,119,0.07)" stroke="#0D7377" stroke-width="2" opacity="0.45"/>
+  <path d="M 610 48 H 780 V 210 Q 780 268 695 290 Q 610 268 610 210 Z"
+        fill="none" stroke="#14A085" stroke-width="1" opacity="0.25"/>
+
+  <!-- VanGuard wordmark -->
+  <text x="72" y="158" font-family="system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif"
+        font-weight="800" font-size="88">
+    <tspan fill="white">Van</tspan><tspan fill="#14A085">Guard</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="76" y="198" font-family="system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif"
+        font-size="22" fill="rgba(255,255,255,0.55)" letter-spacing="0.5">Stay compliant. Keep moving.</text>
+
+  <!-- Teal divider line -->
+  <rect x="76" y="216" width="55" height="2.5" fill="#0D7377"/>
+
+  <!-- Sub-line -->
+  <text x="76" y="246" font-family="system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif"
+        font-size="16" fill="rgba(255,255,255,0.38)">Food safety compliance for UK mobile caterers</text>
+
+  <!-- URL -->
+  <text x="76" y="284" font-family="system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif"
+        font-size="15" fill="#14A085">vanguardapp.netlify.app</text>
+</svg>

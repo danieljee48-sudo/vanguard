@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!-- Redirect the raw Netlify domain to the custom domain -->
+<script>if(location.hostname==='vanguardapp.netlify.app')location.replace('https://vanguardapp.co.uk'+location.pathname+location.search+location.hash);</script>
+<!-- Forward app deep-links (password reset, Stripe return) to the app at /app -->
+<script>(function(){try{var h=location.hash||'',q=location.search||'';if(h.indexOf('type=recovery')>-1||h.indexOf('access_token')>-1||/[?&](checkout|screen)=/.test(q)){location.replace('/app'+q+h);}}catch(e){}})();</script>
+<title>VanGuard | Food Safety Compliance App for Mobile Caterers UK</title>
+<meta content="Food safety compliance app for UK food vans, trailers and market traders. Log temperatures, cleaning checks and daily records, store compliance documents and stay EHO-ready." name="description"/>
+<meta content="food safety app mobile caterers, food hygiene app food truck, EHO records app UK, mobile catering compliance, fridge temperature log app" name="keywords"/>
+<meta content="#1A2744" name="theme-color"/>
+<meta content="xed9iqlhllce5itizyaxo7qkl2jb1q" name="facebook-domain-verification">
+<link href="https://vanguardapp.co.uk/" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="https://vanguardapp.co.uk/" property="og:url"/>
+<meta content="VanGuard | Food Safety Compliance App for Mobile Caterers UK" property="og:title"/>
+<meta content="Food safety records, temperature logs, daily checks and compliance documents for UK mobile caterers. Stay inspection-ready from your phone." property="og:description"/>
+<meta content="https://vanguardapp.co.uk/fb-cover.png" property="og:image"/>
+<meta content="VanGuard" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="VanGuard — Food Safety App for Mobile Caterers" name="twitter:title"/>
+<meta content="Daily food safety logs for mobile caterers. Fridge temps, cleaning records, EHO-ready." name="twitter:description"/>
+<meta content="https://vanguardapp.co.uk/fb-cover.png" name="twitter:image"/>
+<link href="/manifest.json" rel="manifest"/>
+<link href="/icon-192.png" rel="icon"/>
+<link href="/icon-192.png" rel="apple-touch-icon"/>
+<meta content="VanGuard" name="apple-mobile-web-app-title"/>
+<!-- Google Analytics 4 -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-JF2VEER5HP"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());
+  gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'granted'});
+  try{if(localStorage.getItem('vg_consent')==='denied')gtag('consent','update',{analytics_storage:'denied'});}catch(e){}
+  gtag('config','G-JF2VEER5HP');
+</script>
+<!-- Google Ads -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18382247589"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18382247589');
+</script>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+try{if(localStorage.getItem('vg_consent')==='denied')fbq('consent','revoke');}catch(e){}
+fbq('init','4461265214162387');fbq('init','2929364194082466');fbq('track','PageView');
+</script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :root{--navy:#1A2744;--navy2:#122033;--navy3:#0C1628;--teal:#0D7377;--teal-lt:#E6F6F6;--mint:#4ECDC4}
+  html{scroll-behavior:smooth}
+  body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#1A2744;background:#fff;line-height:1.5;-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:15px;padding:15px 26px;border-radius:14px;border:none;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease;width:100%}
+  .btn-primary{background:var(--teal);color:#fff;box-shadow:0 6px 22px rgba(13,115,119,.4)}
+  .btn-primary:hover{transform:translateY(-1px)}
+  .btn-ghost{background:#fff;color:var(--teal);box-shadow:0 4px 16px rgba(0,0,0,.14)}
+  .nav{position:sticky;top:0;z-index:50;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+  .brand{display:flex;align-items:center;gap:9px}
+  .brand img{width:30px;height:30px;border-radius:8px}
+  .brand span{font-size:20px;font-weight:900;color:#fff}
+  .brand b{color:var(--teal)}
+  .nav a.signin{color:#fff;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,.3);border-radius:10px;padding:8px 16px}
+  .hero{background:linear-gradient(120deg,var(--navy) 0%,var(--navy2) 50%,var(--navy3) 100%);color:#fff;padding:52px 0 60px}
+  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+  .eyebrow{font-size:11px;font-weight:800;letter-spacing:1.6px;color:rgba(255,255,255,.42);text-transform:uppercase;margin-bottom:14px}
+  h1{font-size:44px;line-height:1.06;font-weight:900;letter-spacing:-1px;margin-bottom:14px}
+  .hero p.sub{color:rgba(255,255,255,.62);font-size:16px;max-width:440px;margin-bottom:26px}
+  .cta-row{display:flex;flex-direction:column;gap:11px;max-width:380px}
+  .microcopy{color:rgba(255,255,255,.4);font-size:12px;margin-top:12px}
+  .phones{display:flex;justify-content:center;align-items:center;gap:16px}
+  .phone{width:29%;border-radius:24px;overflow:hidden;background:#0C1628;border:2px solid rgba(255,255,255,.16);box-shadow:0 22px 46px rgba(0,0,0,.5)}
+  .phone img{width:100%;display:block}
+  .phone.mid{width:32%;transform:translateY(-8px);z-index:2;box-shadow:0 30px 60px rgba(0,0,0,.6);border-color:rgba(78,205,196,.5)}
+  .trust{background:var(--teal-lt);display:flex;flex-wrap:wrap;justify-content:center;gap:26px;padding:16px 20px;font-size:14px;font-weight:600;color:#31415E}
+  .trust b{color:var(--teal)}
+  section.pad{padding:56px 0}
+  h2{font-size:28px;font-weight:900;text-align:center;letter-spacing:-.5px;margin-bottom:10px}
+  .lead{text-align:center;color:#64748b;max-width:640px;margin:0 auto 34px;font-size:15px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:#fff;border:1px solid #eef1f4;border-radius:18px;padding:22px;box-shadow:0 2px 10px rgba(16,24,40,.04)}
+  .card h3{font-size:16px;margin-bottom:6px}
+  .card p{color:#64748b;font-size:14px}
+  .ico{width:42px;height:42px;border-radius:12px;background:var(--teal-lt);display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:20px}
+  .alt{background:#F8FAFB}
+  .steps{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+  .step{display:flex;gap:16px;align-items:flex-start}
+  .num{flex:0 0 40px;height:40px;border-radius:50%;background:var(--teal);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}
+  .step h4{font-size:15px;margin-bottom:2px}
+  .step p{color:#64748b;font-size:14px}
+  .price{max-width:440px;margin:0 auto}
+  .price-card{background:var(--navy);color:#fff;border:2px solid var(--teal);border-radius:20px;padding:26px;position:relative}
+  .badge{position:absolute;top:16px;right:16px;background:var(--teal);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px}
+  .price-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+  .tile{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px}
+  .tile.year{background:rgba(13,115,119,.18);border-color:var(--teal)}
+  .tile .lbl{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:6px}
+  .tile.year .lbl{color:var(--mint)}
+  .tile .amt{font-size:26px;font-weight:900}
+  .tile .amt small{font-size:12px;color:rgba(255,255,255,.4);font-weight:400}
+  .free{color:var(--mint);font-weight:700;margin-bottom:4px}
+  .price-card .fine{color:rgba(255,255,255,.42);font-size:12px;margin-bottom:18px}
+  table{width:100%;border-collapse:collapse;border-radius:16px;overflow:hidden;border:1px solid #eef1f4;font-size:14px}
+  thead tr{background:var(--navy);color:#fff}
+  th,td{padding:12px;text-align:center}
+  th:first-child,td:first-child{text-align:left;color:#475569}
+  tbody tr:nth-child(even){background:#F8FAFB}
+  .yes{color:var(--teal);font-weight:800}
+  .no{color:#f87171;font-weight:800}
+  .cta-final{background:var(--navy);color:#fff;text-align:center;padding:56px 20px}
+  .cta-final h2{color:#fff}
+  .cta-final .cta-row{margin:22px auto 0}
+  footer{padding:26px 20px;text-align:center;color:#94a3b8;font-size:13px;border-top:1px solid #eef1f4}
+  footer a{color:var(--teal)}
+  #vg-consent{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:var(--navy);color:#fff;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;box-shadow:0 -2px 14px rgba(0,0,0,.3)}
+  #vg-consent span{font-size:13px;max-width:620px;line-height:1.5}
+  #vg-consent a{color:var(--mint);text-decoration:underline}
+  #vg-consent button{border:none;border-radius:9px;padding:9px 20px;font-weight:800;font-size:13px;cursor:pointer}
+  #vg-consent .acc{background:var(--teal);color:#fff}
+  #vg-consent .dec{background:transparent;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.35)}
+  @media(max-width:760px){
+    .hero-grid{grid-template-columns:1fr;gap:26px}
+    h1{font-size:34px}.hero{padding:40px 0 44px}
+    .cta-row{max-width:none}
+    .grid2{grid-template-columns:1fr}
+    .hero .cta-row,.hero .microcopy{text-align:center}
+    .phones{order:-1}
+  }
+  .faq{max-width:720px;margin:0 auto}
+  .faq details{border:1px solid #eef1f4;border-radius:12px;margin-bottom:10px;background:#fff;overflow:hidden}
+  .faq summary{cursor:pointer;font-weight:700;font-size:15px;padding:16px 18px;list-style:none;color:#1A2744}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:'+';float:right;color:#0D7377;font-weight:800}
+  .faq details[open] summary::after{content:'\2013'}
+  .faq .a{padding:0 18px 16px;color:#64748b;font-size:14px;line-height:1.6}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "VanGuard", "applicationCategory": "BusinessApplication", "operatingSystem": "Web browser, iOS, Android", "description": "Food safety compliance app for UK mobile caterers. Log fridge temperatures, cleaning and van checks, and generate an EHO-ready inspection report in one tap.", "url": "https://vanguardapp.co.uk/", "offers": {"@type": "Offer", "price": "7.99", "priceCurrency": "GBP", "description": "14-day free trial; payment details collected securely at checkout; no charge during the trial. Then £7.99/month or £69.99/year."}, "publisher": {"@type": "Organization", "name": "VanGuard", "url": "https://vanguardapp.co.uk/", "logo": "https://vanguardapp.co.uk/icon-512.png"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do mobile caterers need to keep food safety records in the UK?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. UK food hygiene law expects mobile caterers to keep records such as fridge and hot-hold temperatures, cleaning checks and opening and closing checks — usually through the FSA's Safer Food, Better Business system. VanGuard logs all of these in seconds and stores them safely."}}, {"@type": "Question", "name": "What records does an EHO want to see at an inspection?", "acceptedAnswer": {"@type": "Answer", "text": "Typically temperature logs (fridge, freezer, hot-hold and probe checks), cleaning schedules, delivery records, allergen information and your daily diary. VanGuard bundles your whole history into one EHO-ready report you can hand over on the spot."}}, {"@type": "Question", "name": "How do I prepare for an EHO inspection as a food truck?", "acceptedAnswer": {"@type": "Answer", "text": "Keep your daily checks up to date and have your records ready to show. With VanGuard you log checks as you trade and export a full inspection pack in one tap, so there is no scrambling through paperwork on the day."}}, {"@type": "Question", "name": "Does VanGuard work for food trucks, trailers and gazebos?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The checklists adapt to your unit type — van, trailer, gazebo or stall — so you only see the checks that apply to you."}}, {"@type": "Question", "name": "How much does VanGuard cost?", "acceptedAnswer": {"@type": "Answer", "text": "£7.99 a month or £69.99 a year. There is a 14-day free trial; payment details are collected securely at checkout and you are not charged during the trial."}}, {"@type": "Question", "name": "Do I need to install an app from the App Store?", "acceptedAnswer": {"@type": "Answer", "text": "No. VanGuard runs in any phone's web browser and can be added to your home screen — there is nothing to download from an app store."}}]}</script>
+</meta></head>
+<body>
+<div class="nav">
+<a class="brand" href="/"><img alt="VanGuard" src="/icon-192.png"/><span>Van<b>Guard</b></span></a>
+<a class="signin" href="/app?mode=login">Sign in</a>
+</div>
+<header class="hero">
+<div class="wrap hero-grid">
+<div>
+<div class="eyebrow">Mobile caterer food safety</div>
+<h1>Stay compliant.<br/>Keep moving.</h1>
+<p class="sub">Food safety records built for mobile caterers. Log your checks in under a minute a day and hand the EHO a full report in one tap.</p>
+<div class="cta-row">
+<a class="btn btn-primary" data-cta="hero" href="/app?mode=register">Start free trial</a>
+<a class="btn btn-ghost" data-cta="demo" href="/app?demo=1">▶ Try the live demo — no sign-up</a>
+</div>
+<p class="microcopy">14 days free · No charge during the trial · Cancel anytime</p>
+</div>
+<div class="phones">
+<div class="phone"><img alt="Temperature logging" loading="lazy" src="/shots/temps.jpg"/></div>
+<div class="phone mid"><img alt="Compliance dashboard" loading="lazy" src="/shots/dashboard.jpg"/></div>
+<div class="phone"><img alt="EHO records" loading="lazy" src="/shots/records.jpg"/></div>
+</div>
+</div>
+</header>
+<div class="trust">
+<div>✓ <b>14-day free trial</b></div>
+<div>✓ No charge during the trial</div>
+<div>✓ Works on any phone</div>
+</div>
+<section class="pad">
+<div class="wrap">
+<h2>Paper records are a liability.</h2>
+<p class="lead">Most food safety apps are built for restaurants — too complex, too expensive, or missing the checks mobile caterers actually need. Paper gets wet, lost, or forgotten. Neither impresses an EHO.</p>
+<div class="card" style="max-width:640px;margin:0 auto;background:var(--teal-lt);border:none">
+<p style="font-weight:800;color:var(--teal);margin-bottom:10px">VanGuard is different:</p>
+<p style="color:#334155;margin-bottom:8px">→ Designed around the mobile caterer workflow</p>
+<p style="color:#334155;margin-bottom:8px">→ Van, trailer &amp; gazebo-specific checks</p>
+<p style="color:#334155;margin-bottom:8px">→ Instant audit report — no manual compilation</p>
+<p style="color:#334155">→ £7.99/month. Not £50+ like the big players</p>
+</div>
+</div>
+</section>
+<section class="pad alt">
+<div class="wrap">
+<h2>Everything you need.</h2>
+<p class="lead">Nothing you don't.</p>
+<div class="grid2">
+<div class="card"><div class="ico">🌡️</div><h3>Temperature Logs</h3><p>Log fridge, hot-hold &amp; delivery temps in seconds. Timestamped and tamper-proof.</p></div>
+<div class="card"><div class="ico">🚐</div><h3>Van &amp; Cleaning Checks</h3><p>Daily vehicle, equipment and cleaning checklists tailored to your unit type.</p></div>
+<div class="card"><div class="ico">📋</div><h3>EHO Audit Report</h3><p>One tap generates a PDF covering your entire compliance history — ready for inspection day.</p></div>
+<div class="card"><div class="ico">📖</div><h3>Food Safety Diary</h3><p>Record deliveries, waste, complaints and allergen notes with date and time stamps.</p></div>
+</div>
+</div>
+</section>
+<section class="pad">
+<div class="wrap">
+<h2>Up and running in minutes.</h2>
+<div class="steps" style="margin-top:26px">
+<div class="step"><div class="num">1</div><div><h4>Start your free trial</h4><p>14 days free, every feature included. No charge during the trial — cancel anytime.</p></div></div>
+<div class="step"><div class="num">2</div><div><h4>Log as you trade</h4><p>30 seconds per check. Works on any phone, nothing to install.</p></div></div>
+<div class="step"><div class="num">3</div><div><h4>Ace your inspection</h4><p>Download your audit report and hand it straight to the EHO.</p></div></div>
+</div>
+</div>
+</section>
+<section class="pad alt">
+<div class="wrap">
+<h2>Simple pricing.</h2>
+<p class="lead">No hidden fees.</p>
+<div class="price">
+<div class="price-card">
+<div class="badge">⭐ 14 days free</div>
+<div style="font-size:12px;font-weight:800;letter-spacing:1px;color:var(--teal);text-transform:uppercase">Solo plan</div>
+<div class="price-grid">
+<div class="tile"><div class="lbl">Monthly</div><div class="amt">£7.99<small>/mo</small></div></div>
+<div class="tile year"><div class="lbl">Yearly · save 27%</div><div class="amt">£69.99<small>/yr</small></div></div>
+</div>
+<p class="free">Free for your first 14 days.</p>
+<p class="fine">No charge during the trial to start. Pick monthly or yearly before your trial ends — cancel anytime and pay nothing.</p>
+<a class="btn btn-primary" data-cta="pricing" href="/app?mode=register">Start free trial</a>
+</div>
+</div>
+</div>
+</section>
+<section class="pad">
+<div class="wrap">
+<h2>VanGuard vs. paper records.</h2>
+<p class="lead">Most mobile caterers still use clipboards. Here's what that costs you.</p>
+<table>
+<thead><tr><th></th><th>Paper</th><th>VanGuard</th></tr></thead>
+<tbody>
+<tr><td>Survives a rainy market day</td><td class="no">✗</td><td class="yes">✓</td></tr>
+<tr><td>Auto-timestamps every entry</td><td class="no">✗</td><td class="yes">✓</td></tr>
+<tr><td>Flags a failed temp reading instantly</td><td class="no">✗</td><td class="yes">✓</td></tr>
+<tr><td>Export a full inspection pack in one tap</td><td class="no">✗</td><td class="yes">✓</td></tr>
+<tr><td>Morning reminder to log your checks</td><td class="no">✗</td><td class="yes">✓</td></tr>
+<tr><td>Works on any phone, nothing to install</td><td class="no">✗</td><td class="yes">✓</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="cta-final">
+<div class="wrap" style="max-width:440px">
+<h2>Ready to go paperless?</h2>
+<p style="color:rgba(255,255,255,.55);margin-top:8px">Join mobile caterers using VanGuard to stay compliant.</p>
+<div class="cta-row">
+<a class="btn btn-primary" data-cta="closing" href="/app?mode=register">Start your free trial</a>
+<a class="btn btn-ghost" data-cta="demo" href="/app?demo=1">Take a look inside — no sign-up</a>
+</div>
+<p class="microcopy">14 days free · No charge during the trial · Cancel anytime</p>
+</div>
+</section>
+<section class="pad">
+<div class="wrap">
+<h2>Food safety records for mobile caterers — FAQ</h2>
+<div class="faq">
+<details><summary>Do mobile caterers need to keep food safety records in the UK?</summary><div class="a">Yes. UK food hygiene law expects mobile caterers to keep records such as fridge and hot-hold temperatures, cleaning checks and opening and closing checks — usually through the FSA's Safer Food, Better Business system. VanGuard logs all of these in seconds and stores them safely.</div></details>
+<details><summary>What records does an EHO want to see at an inspection?</summary><div class="a">Typically temperature logs (fridge, freezer, hot-hold and probe checks), cleaning schedules, delivery records, allergen information and your daily diary. VanGuard bundles your whole history into one EHO-ready report you can hand over on the spot.</div></details>
+<details><summary>How do I prepare for an EHO inspection as a food truck?</summary><div class="a">Keep your daily checks up to date and have your records ready to show. With VanGuard you log checks as you trade and export a full inspection pack in one tap, so there is no scrambling through paperwork on the day.</div></details>
+<details><summary>Does VanGuard work for food trucks, trailers and gazebos?</summary><div class="a">Yes. The checklists adapt to your unit type — van, trailer, gazebo or stall — so you only see the checks that apply to you.</div></details>
+<details><summary>How much does VanGuard cost?</summary><div class="a">£7.99 a month or £69.99 a year, with a 14-day free trial and no charge during the trial to start.</div></details>
+<details><summary>Do I need to install an app from the App Store?</summary><div class="a">No. VanGuard runs in any phone's web browser and can be added to your home screen — there is nothing to download from an app store.</div></details>
+</div>
+<div style="max-width:620px;margin:26px auto 0"><p style="font-weight:800;color:var(--navy);margin-bottom:8px">Popular guides</p><ul style="margin:0;padding-left:18px;line-height:2"><li><a href="/eho-inspection-checklist-mobile-caterers" style="color:var(--teal);font-weight:600">EHO inspection checklist for mobile caterers</a></li><li><a href="/food-safety-records-mobile-caterers-uk" style="color:var(--teal);font-weight:600">Food safety records you legally need</a></li><li><a href="/5-star-food-hygiene-rating-mobile-caterers" style="color:var(--teal);font-weight:600">How to get a 5-star food hygiene rating</a></li><li><a href="/fridge-temperature-records-food-truck" style="color:var(--teal);font-weight:600">Fridge &amp; temperature records for food trucks</a></li><li><a href="/food-safety-app-mobile-caterers" style="color:var(--teal);font-weight:600">Food safety app for mobile caterers — overview</a></li><li><a href="/how-to-log-food-temperatures-mobile-catering" style="color:var(--teal);font-weight:600">How to log food temperatures</a></li><li><a href="/daily-food-safety-diary-mobile-caterers" style="color:var(--teal);font-weight:600">Daily food safety diary</a></li><li><a href="/lpg-gas-equipment-safety-checks-mobile-catering" style="color:var(--teal);font-weight:600">LPG gas &amp; equipment safety checks</a></li><li><a href="/how-to-create-eho-inspection-pack" style="color:var(--teal);font-weight:600">How to create an EHO inspection pack</a></li></ul></div>
+</div>
+</section>
+<footer>
+<p style="margin-bottom:4px">© 2026 VanGuard · Food safety for UK mobile caterers</p>
+<p><a href="/food-safety-app-mobile-caterers">Guide</a> · <a download="" href="/checklist.pdf">Free inspection checklist (PDF)</a> · <a href="mailto:hello@vanguardapp.co.uk">Contact &amp; support</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></p>
+</footer>
+<script>
+(function(){
+  var choice;try{choice=localStorage.getItem('vg_consent');}catch(e){return;}
+  if(choice)return;
+  var b=document.createElement('div');b.id='vg-consent';
+  b.innerHTML='<span>We use cookies to see how VanGuard is used so we can improve it. See our <a href="/privacy.html">Privacy Policy</a>.</span>';
+  var a=document.createElement('button');a.className='acc';a.textContent='Accept';
+  var d=document.createElement('button');d.className='dec';d.textContent='Decline';
+  function close(v){try{localStorage.setItem('vg_consent',v);}catch(e){}if(v==='denied'){try{gtag('consent','update',{analytics_storage:'denied'});}catch(e){}try{if(window.fbq)fbq('consent','revoke');}catch(e){}}b.remove();}
+  a.onclick=function(){close('granted');};d.onclick=function(){close('denied');};
+  b.appendChild(a);b.appendChild(d);document.body.appendChild(b);
+})();
+</script>
+<script>
+(function(){
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href*="mode=register"],a[href*="demo=1"]');
+    if(!a)return;
+    try{ if(typeof gtag==='function'){
+      gtag('event','cta_click',{cta_location:a.getAttribute('data-cta')||'unknown',page_path:location.pathname});
+    }}catch(err){}
+  },true);
+})();
+</script>
+</body>
+</html>

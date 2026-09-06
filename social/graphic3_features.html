@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1080px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0fafa; }
+  .canvas { width: 1080px; height: 1080px; position: relative; display: flex; flex-direction: column; align-items: center; padding: 64px 72px; }
+
+  .top { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 44px; }
+  .logo-row { display: flex; align-items: center; gap: 12px; }
+  .logo-icon { width: 44px; height: 44px; background: #0D7377; border-radius: 11px; display: flex; align-items: center; justify-content: center; }
+  .logo-icon svg { width: 26px; height: 26px; }
+  .logo-text { font-size: 20px; font-weight: 800; color: #1A2744; letter-spacing: 1px; }
+  .tagline { font-size: 15px; font-weight: 600; color: #0D7377; }
+
+  .headline { font-size: 56px; font-weight: 800; color: #1A2744; text-align: center; line-height: 1.1; margin-bottom: 14px; }
+  .headline .teal { color: #0D7377; }
+  .subline { font-size: 20px; color: #6b7280; text-align: center; margin-bottom: 48px; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; width: 100%; }
+  .feature-card { background: white; border-radius: 20px; padding: 28px 24px; border: 1.5px solid #e6f6f6; position: relative; overflow: hidden; }
+  .feature-card.accent { background: #1A2744; border-color: #1A2744; }
+  .feature-card.teal-card { background: #0D7377; border-color: #0D7377; }
+  .feat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .feat-icon.navy { background: rgba(26,39,68,0.08); }
+  .feat-icon.teal { background: rgba(13,115,119,0.12); }
+  .feat-icon.white { background: rgba(255,255,255,0.15); }
+  .feat-icon svg { width: 26px; height: 26px; }
+  .feat-title { font-size: 18px; font-weight: 700; color: #1A2744; margin-bottom: 8px; line-height: 1.2; }
+  .feat-title.light { color: white; }
+  .feat-desc { font-size: 13px; color: #6b7280; line-height: 1.5; }
+  .feat-desc.light { color: rgba(255,255,255,0.65); }
+  .feat-tag { display: inline-block; font-size: 10px; font-weight: 700; color: #0D7377; background: rgba(13,115,119,0.1); border-radius: 6px; padding: 3px 8px; margin-bottom: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .feat-tag.light { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.1); }
+
+  .bottom-bar { position: absolute; bottom: 52px; left: 72px; right: 72px; display: flex; align-items: center; justify-content: space-between; }
+  .url-row { display: flex; align-items: center; gap: 10px; }
+  .url-text { font-size: 18px; font-weight: 600; color: #1A2744; }
+  .free-pill { background: #0D7377; border-radius: 100px; padding: 12px 28px; font-size: 16px; font-weight: 700; color: white; }
+  .haccp-badge { font-size: 13px; font-weight: 600; color: #0D7377; background: rgba(13,115,119,0.1); border: 1px solid rgba(13,115,119,0.2); border-radius: 8px; padding: 8px 16px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="top">
+    <div class="logo-row">
+      <div class="logo-icon">
+        <svg viewBox="0 0 26 26" fill="none">
+          <path d="M13 3L21 7V12C21 16.4 17.5 20.4 13 22C8.5 20.4 5 16.4 5 12V7L13 3Z" fill="white"/>
+          <path d="M9 13L12 16L17 10" stroke="#0D7377" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="logo-text">VANGUARD</span>
+    </div>
+    <span class="tagline">Built for mobile caterers</span>
+  </div>
+
+  <div class="headline">Everything you need.<br/><span class="teal">All in one place.</span></div>
+  <div class="subline">Works on any phone. No app download. No paperwork.</div>
+
+  <div class="grid">
+    <div class="feature-card">
+      <div class="feat-icon navy">
+        <svg viewBox="0 0 26 26" fill="none"><rect x="4" y="3" width="18" height="20" rx="3" stroke="#1A2744" stroke-width="1.8"/><path d="M8 9H18M8 13H14M8 17H11" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div class="feat-tag">Daily</div>
+      <div class="feat-title">Temperature logs</div>
+      <div class="feat-desc">Log fridge, freezer, hot hold and probe temps. Colour-coded pass/fail. Records stored automatically.</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feat-icon teal">
+        <svg viewBox="0 0 26 26" fill="none"><path d="M13 3L21 7V12C21 16.4 17.5 20.4 13 22C8.5 20.4 5 16.4 5 12V7L13 3Z" stroke="#0D7377" stroke-width="1.8"/><path d="M9 13L12 16L17 10" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="feat-tag">HACCP</div>
+      <div class="feat-title">Opening & closing checks</div>
+      <div class="feat-desc">Tap through your daily checklist in seconds. Custom items for your setup.</div>
+    </div>
+
+    <div class="feature-card accent">
+      <div class="feat-icon white">
+        <svg viewBox="0 0 26 26" fill="none"><rect x="4" y="4" width="18" height="18" rx="3" stroke="white" stroke-width="1.8"/><path d="M8 10H18M8 14H13" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" stroke-linecap="round"/><path d="M15 16L20 21M17.5 16.5L19.5 14.5" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div class="feat-tag light">One tap</div>
+      <div class="feat-title light">EHO audit report</div>
+      <div class="feat-desc light">Generate a full printable PDF inspection pack. Show an EHO everything they need instantly.</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feat-icon navy">
+        <svg viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="9" stroke="#1A2744" stroke-width="1.8"/><path d="M13 8V13L16 15" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div class="feat-tag">End of day</div>
+      <div class="feat-title">Cleaning schedule</div>
+      <div class="feat-desc">Log end-of-day cleaning tasks. Add your own items. Saved with date and signature.</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feat-icon teal">
+        <svg viewBox="0 0 26 26" fill="none"><rect x="5" y="8" width="16" height="10" rx="2" stroke="#0D7377" stroke-width="1.8"/><path d="M9 8V6a4 4 0 018 0v2" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round"/><circle cx="13" cy="13" r="2" fill="#0D7377"/></svg>
+      </div>
+      <div class="feat-tag">Safety</div>
+      <div class="feat-title">LPG safety checks</div>
+      <div class="feat-desc">Gas safety log specifically for mobile catering. Timestamped and stored automatically.</div>
+    </div>
+
+    <div class="feature-card teal-card">
+      <div class="feat-icon white">
+        <svg viewBox="0 0 26 26" fill="none"><path d="M5 13H21M12 6L5 13L12 20" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="feat-tag light">No download</div>
+      <div class="feat-title light">Works on any phone</div>
+      <div class="feat-desc light">Open in your browser, add to home screen. Works offline. No app store needed.</div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="url-row">
+      <span class="url-text">vanguardapp.co.uk</span>
+    </div>
+    <div class="haccp-badge">HACCP-aligned · UK mobile caterers</div>
+    <div class="free-pill">Try it free →</div>
+  </div>
+</div>
+</body>
+</html>

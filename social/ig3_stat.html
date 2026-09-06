@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1080px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1A2744; }
+  .canvas { width: 1080px; height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px; position: relative; }
+
+  .ring1 { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 700px; border-radius: 50%; border: 1px solid rgba(13,115,119,0.12); }
+  .ring2 { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 860px; height: 860px; border-radius: 50%; border: 1px solid rgba(13,115,119,0.07); }
+
+  .logo-row { display: flex; align-items: center; gap: 12px; position: absolute; top: 60px; left: 80px; }
+  .logo-icon { width: 40px; height: 40px; background: #0D7377; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .logo-icon svg { width: 22px; height: 22px; }
+  .logo-text { font-size: 18px; font-weight: 800; color: white; letter-spacing: 1px; }
+
+  .center { text-align: center; position: relative; z-index: 2; }
+  .pre-label { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; }
+  .big-num { font-size: 180px; font-weight: 900; color: #0D7377; line-height: 0.9; margin-bottom: 16px; letter-spacing: -8px; }
+  .big-unit { font-size: 48px; font-weight: 800; color: rgba(13,115,119,0.6); }
+  .big-label { font-size: 38px; font-weight: 800; color: white; line-height: 1.2; margin-bottom: 24px; }
+  .big-sub { font-size: 20px; color: rgba(255,255,255,0.45); max-width: 560px; margin: 0 auto 48px; line-height: 1.5; }
+
+  .divider { width: 60px; height: 3px; background: #0D7377; border-radius: 2px; margin: 0 auto 40px; }
+
+  .stat-row { display: flex; gap: 24px; justify-content: center; }
+  .stat { text-align: center; }
+  .stat-num { font-size: 32px; font-weight: 800; color: white; }
+  .stat-label { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+  .url { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); font-size: 17px; font-weight: 600; color: rgba(255,255,255,0.3); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="ring1"></div>
+  <div class="ring2"></div>
+
+  <div class="logo-row">
+    <div class="logo-icon">
+      <svg viewBox="0 0 22 22" fill="none">
+        <path d="M11 2L18 5.5V10C18 13.7 15.2 17 11 18.5C6.8 17 4 13.7 4 10V5.5L11 2Z" fill="white"/>
+        <path d="M7.5 10.5L10 13L14.5 8" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="logo-text">VANGUARD</span>
+  </div>
+
+  <div class="center">
+    <div class="pre-label">Did you know?</div>
+    <div class="big-num">£<span style="font-size:140px">5k</span></div>
+    <div class="big-label">Average fine for failing<br/>to keep food safety records</div>
+    <div class="big-sub">EHOs can issue improvement notices, hygiene emergency prohibition orders, and fines — all triggered by missing paperwork.</div>
+    <div class="divider"></div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">£0</div><div class="stat-label">Cost to use VanGuard</div></div>
+      <div class="stat" style="border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1); padding: 0 24px;"><div class="stat-num">2 min</div><div class="stat-label">Daily logging time</div></div>
+      <div class="stat"><div class="stat-num">1 tap</div><div class="stat-label">Full EHO report</div></div>
+    </div>
+  </div>
+
+  <div class="url">vanguardapp.co.uk</div>
+</div>
+</body>
+</html>

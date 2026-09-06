@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" fill="#1A2744"/>
+  <path d="M 90 75 H 310 V 238 Q 310 318 200 368 Q 90 318 90 238 Z" fill="#0D7377"/>
+  <text x="200" y="220" text-anchor="middle" dominant-baseline="middle" fill="white"
+        font-family="system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif"
+        font-weight="800" font-size="110">VG</text>
+  <text x="200" y="310" text-anchor="middle" fill="rgba(255,255,255,0.72)"
+        font-family="system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif"
+        font-weight="600" font-size="20" letter-spacing="5">VANGUARD</text>
+</svg>

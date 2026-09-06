@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1080px; height: 1080px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0C1628; }
+  .canvas { width: 1080px; height: 1080px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 64px 80px; }
+
+  .top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 48px; }
+  .logo-row { display: flex; align-items: center; gap: 12px; }
+  .logo-icon { width: 42px; height: 42px; background: #0D7377; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .logo-icon svg { width: 24px; height: 24px; }
+  .logo-text { font-size: 20px; font-weight: 700; color: white; letter-spacing: 1px; }
+  .top-tag { font-size: 13px; font-weight: 700; color: #0D7377; background: rgba(13,115,119,0.15); border: 1px solid rgba(13,115,119,0.3); border-radius: 6px; padding: 6px 14px; }
+
+  .headline { font-size: 64px; font-weight: 800; color: white; text-align: center; line-height: 1.05; margin-bottom: 16px; }
+  .headline .teal { color: #0D7377; }
+  .subline { font-size: 22px; color: rgba(255,255,255,0.5); text-align: center; margin-bottom: 48px; }
+
+  /* PDF mockup */
+  .pdf-wrap { position: relative; display: flex; justify-content: center; align-items: flex-start; width: 100%; }
+  .pdf-shadow { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); width: 680px; height: 40px; background: rgba(13,115,119,0.15); border-radius: 50%; filter: blur(12px); }
+  .pdf-doc { width: 680px; background: white; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+  .pdf-header { background: #1A2744; padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; }
+  .pdf-header-left { display: flex; align-items: center; gap: 12px; }
+  .pdf-header-icon { width: 36px; height: 36px; background: #0D7377; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .pdf-header-icon svg { width: 20px; height: 20px; }
+  .pdf-title { font-size: 15px; font-weight: 700; color: white; }
+  .pdf-subtitle { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .pdf-date { font-size: 12px; color: rgba(255,255,255,0.4); }
+  .pdf-body { padding: 20px 28px; }
+  .pdf-section { margin-bottom: 14px; }
+  .pdf-section-title { font-size: 10px; font-weight: 700; color: #0D7377; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #e5e7eb; }
+  .pdf-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #f3f4f6; }
+  .pdf-row:last-child { border-bottom: none; }
+  .pdf-row-label { font-size: 12px; color: #4b5563; }
+  .pdf-row-val { font-size: 12px; font-weight: 600; color: #1a2744; }
+  .pdf-row-pass { font-size: 11px; font-weight: 700; color: #15803d; background: #dcfce7; border-radius: 4px; padding: 2px 8px; }
+  .pdf-row-warn { font-size: 11px; font-weight: 700; color: #92400e; background: #fef3c7; border-radius: 4px; padding: 2px 8px; }
+  .pdf-temps { display: flex; gap: 10px; }
+  .temp-chip { flex: 1; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 10px; text-align: center; }
+  .temp-chip-label { font-size: 9px; color: #9ca3af; margin-bottom: 4px; }
+  .temp-chip-val { font-size: 18px; font-weight: 800; color: #1A2744; }
+  .temp-chip-ok { font-size: 9px; font-weight: 700; color: #15803d; }
+  .pdf-footer { background: #f9fafb; padding: 12px 28px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; }
+  .pdf-footer-text { font-size: 10px; color: #9ca3af; }
+  .pdf-generated { font-size: 10px; color: #9ca3af; }
+
+  .bottom-row { position: absolute; bottom: 52px; left: 80px; right: 80px; display: flex; align-items: center; justify-content: space-between; }
+  .url-text { font-size: 20px; font-weight: 600; color: rgba(255,255,255,0.4); }
+  .cta-pill { background: #0D7377; border-radius: 100px; padding: 14px 32px; font-size: 18px; font-weight: 700; color: white; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="top-row">
+    <div class="logo-row">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3L20 7V12C20 15.9 17.1 19.5 12 21C6.9 19.5 4 15.9 4 12V7L12 3Z" fill="white" opacity="0.9"/>
+          <path d="M8.5 12L11 14.5L15.5 9.5" stroke="#0D7377" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="logo-text">VANGUARD</span>
+    </div>
+    <div class="top-tag">EHO-ready in seconds</div>
+  </div>
+
+  <div class="headline">One tap.<br/>Full <span class="teal">EHO audit</span><br/>report. Done.</div>
+  <div class="subline">Everything an inspector needs — generated as a printable PDF.</div>
+
+  <div class="pdf-wrap">
+    <div class="pdf-shadow"></div>
+    <div class="pdf-doc">
+      <div class="pdf-header">
+        <div class="pdf-header-left">
+          <div class="pdf-header-icon">
+            <svg viewBox="0 0 20 20" fill="none">
+              <path d="M10 2L17 5.5V10C17 13.6 13.9 16.8 10 18C6.1 16.8 3 13.6 3 10V5.5L10 2Z" fill="white" opacity="0.9"/>
+            </svg>
+          </div>
+          <div>
+            <div class="pdf-title">VanGuard — Food Safety Audit Pack</div>
+            <div class="pdf-subtitle">Daniel's Burger Van · NCASS Member</div>
+          </div>
+        </div>
+        <div class="pdf-date">26 June 2026</div>
+      </div>
+      <div class="pdf-body">
+        <div class="pdf-section">
+          <div class="pdf-section-title">Temperature Records</div>
+          <div class="pdf-temps">
+            <div class="temp-chip"><div class="temp-chip-label">Fridge 1</div><div class="temp-chip-val">3°C</div><div class="temp-chip-ok">✓ Safe</div></div>
+            <div class="temp-chip"><div class="temp-chip-label">Hot hold</div><div class="temp-chip-val">72°C</div><div class="temp-chip-ok">✓ Safe</div></div>
+            <div class="temp-chip"><div class="temp-chip-label">Freezer</div><div class="temp-chip-val">-18°C</div><div class="temp-chip-ok">✓ Safe</div></div>
+            <div class="temp-chip"><div class="temp-chip-label">Probe check</div><div class="temp-chip-val">76°C</div><div class="temp-chip-ok">✓ Safe</div></div>
+          </div>
+        </div>
+        <div class="pdf-section">
+          <div class="pdf-section-title">Opening Checks</div>
+          <div class="pdf-row"><span class="pdf-row-label">Van exterior inspection</span><span class="pdf-row-pass">PASS</span></div>
+          <div class="pdf-row"><span class="pdf-row-label">Handwashing facilities available</span><span class="pdf-row-pass">PASS</span></div>
+          <div class="pdf-row"><span class="pdf-row-label">LPG connections checked</span><span class="pdf-row-pass">PASS</span></div>
+          <div class="pdf-row"><span class="pdf-row-label">Food stored off floor</span><span class="pdf-row-pass">PASS</span></div>
+        </div>
+        <div class="pdf-section">
+          <div class="pdf-section-title">Cleaning Log</div>
+          <div class="pdf-row"><span class="pdf-row-label">Grill surfaces cleaned</span><span class="pdf-row-pass">PASS</span></div>
+          <div class="pdf-row"><span class="pdf-row-label">Food contact surfaces sanitised</span><span class="pdf-row-pass">PASS</span></div>
+          <div class="pdf-row"><span class="pdf-row-label">Waste bins emptied</span><span class="pdf-row-pass">PASS</span></div>
+        </div>
+      </div>
+      <div class="pdf-footer">
+        <div class="pdf-footer-text">Generated by VanGuard · vanguardapp.co.uk</div>
+        <div class="pdf-generated">HACCP-aligned digital records</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-row">
+    <div class="url-text">vanguardapp.co.uk</div>
+    <div class="cta-pill">Free to try — no install needed</div>
+  </div>
+</div>
+</body>
+</html>

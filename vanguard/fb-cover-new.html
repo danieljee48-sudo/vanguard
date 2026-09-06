@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1A2744; font-family: 'Inter', sans-serif; }
+  .cover {
+    width: 820px; height: 312px;
+    background: #1A2744;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    padding: 0 56px;
+  }
+  .cover::before {
+    content: '';
+    position: absolute; top: -120px; right: -120px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(13,115,119,0.25) 0%, transparent 70%);
+  }
+  .cover::after {
+    content: '';
+    position: absolute; bottom: -80px; left: 200px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(13,115,119,0.12) 0%, transparent 70%);
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(13,115,119,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(13,115,119,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .left { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 12px; }
+  .logo-row { display: flex; align-items: center; gap: 14px; }
+  .shield {
+    width: 52px; height: 52px; background: #0D7377;
+    border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .logo-text { font-size: 38px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+  .logo-text span { color: #0D7377; }
+  .tagline { font-size: 17px; color: rgba(255,255,255,0.7); font-weight: 500; max-width: 380px; line-height: 1.5; }
+  .pills { display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+  .pill {
+    background: rgba(13,115,119,0.2); border: 1px solid rgba(13,115,119,0.4);
+    color: #4DD4D7; font-size: 12px; font-weight: 600;
+    padding: 5px 12px; border-radius: 50px; letter-spacing: 0.3px;
+  }
+  .right { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+  .phone {
+    width: 130px; height: 220px; background: #0F1E3A;
+    border-radius: 22px; border: 2px solid rgba(255,255,255,0.12);
+    padding: 12px 10px; display: flex; flex-direction: column; gap: 7px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .phone-notch { width: 40px; height: 5px; background: rgba(255,255,255,0.15); border-radius: 3px; margin: 0 auto 6px; }
+  .phone-bar { height: 10px; border-radius: 4px; background: #0D7377; width: 100%; }
+  .phone-row { display: flex; align-items: center; gap: 6px; }
+  .check-circle {
+    width: 14px; height: 14px; border-radius: 50%; background: #0D7377;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  }
+  .check-circle::after { content: '✓'; color: white; font-size: 8px; font-weight: 700; }
+  .check-line { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.15); flex: 1; }
+  .temp-badge {
+    background: rgba(13,115,119,0.3); border: 1px solid rgba(13,115,119,0.5);
+    border-radius: 8px; padding: 5px 8px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .temp-label { font-size: 9px; color: rgba(255,255,255,0.5); }
+  .temp-value { font-size: 13px; font-weight: 700; color: #4DD4D7; }
+  .url-badge {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 8px 14px;
+    color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 500;
+  }
+  .url-badge span { color: #4DD4D7; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="grid"></div>
+  <div class="left">
+    <div class="logo-row">
+      <div class="shield">
+        <svg width="28" height="32" viewBox="0 0 28 32" fill="none">
+          <path d="M14 0L0 5.5V16C0 23.5 6.2 30.4 14 32C21.8 30.4 28 23.5 28 16V5.5L14 0Z" fill="white" opacity="0.15"/>
+          <path d="M14 3L3 7.5V16C3 22.5 7.8 28.5 14 30C20.2 28.5 25 22.5 25 16V7.5L14 3Z" fill="white" opacity="0.2"/>
+          <polyline points="8,16 12,20 20,11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="logo-text">Van<span>Guard</span></div>
+    </div>
+    <div class="tagline">Food safety records for UK mobile caterers.<br>Your phone. Your van. EHO-ready.</div>
+    <div class="pills">
+      <div class="pill">🌡️ Temp Logs</div>
+      <div class="pill">🧹 Cleaning Records</div>
+      <div class="pill">📋 EHO Export</div>
+      <div class="pill">📵 Works Offline</div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-bar"></div>
+      <div class="phone-row"><div class="check-circle"></div><div class="check-line"></div></div>
+      <div class="phone-row"><div class="check-circle"></div><div class="check-line" style="width:70%"></div></div>
+      <div class="phone-row"><div class="check-circle"></div><div class="check-line" style="width:85%"></div></div>
+      <div style="height:4px"></div>
+      <div class="temp-badge">
+        <div><div class="temp-label">Fridge 1</div><div class="temp-value">4°C ✓</div></div>
+        <div style="width:1px;height:28px;background:rgba(255,255,255,0.1)"></div>
+        <div><div class="temp-label">Freezer</div><div class="temp-value">-18°C ✓</div></div>
+      </div>
+      <div style="height:2px"></div>
+      <div style="background:#0D7377;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+        <span style="color:white;font-size:9px;font-weight:700;letter-spacing:0.5px">EXPORT EHO REPORT</span>
+      </div>
+    </div>
+    <div class="url-badge"><span>vanguardapp.co.uk</span></div>
+  </div>
+</div>
+</body>
+</html>

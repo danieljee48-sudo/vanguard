@@ -1,0 +1,26 @@
+[build]
+  publish = "vanguard"
+  functions = "netlify/functions"
+
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL,VAPID_PUBLIC_KEY"
+
+# The app ships as one large HTML file with the React source inline in a <textarea>.
+# Netlify's HTML post-processing/minifier chokes on that block (it contains literal
+# "</body></html>" strings inside w.document.write) and TRUNCATES the file on deploy,
+# which is what broke the live site. Disable all asset post-processing.
+[build.processing]
+  skip_processing = true
+
+[functions.push-send]
+  schedule = "0 7 * * *"
+
+# The old rule here was  from = "/*"  to = "/index.html"  status = 200, which meant
+# EVERY unknown URL returned the marketing homepage with an HTTP 200. Google reads that
+# as a soft 404 / duplicate of the homepage, and it let any typo'd or stale link quietly
+# index as another copy of "/". Replaced with a scoped rewrite for the app shell plus a
+# real 404 page (vanguard/404.html, which Netlify serves automatically).
+[[redirects]]
+  from = "/app/*"
+  to = "/app/index.html"
+  status = 200

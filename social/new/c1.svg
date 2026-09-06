@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350" font-family="DejaVu Sans">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#1A2744"/><stop offset="1" stop-color="#0A1220"/></linearGradient>
+    <linearGradient id="ic" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12898E"/><stop offset="1" stop-color="#0A5F63"/></linearGradient>
+  </defs>
+  <rect width="1080" height="1350" fill="url(#bg)"/>
+  <circle cx="880" cy="180" r="420" fill="#14A085" opacity="0.06"/>
+  <!-- logo icon -->
+  <g transform="translate(430,150) scale(0.43)">
+    <rect x="0" y="0" width="512" height="512" rx="115" fill="url(#ic)"/>
+    <g fill="#FFFFFF" opacity="0.92"><rect x="66" y="212" width="66" height="16" rx="8"/><rect x="54" y="246" width="96" height="16" rx="8"/><rect x="74" y="280" width="50" height="16" rx="8"/></g>
+    <path d="M152 306 V198 a16 16 0 0 1 16-16 H320 l42 42 H388 a16 16 0 0 1 16 16 V306 a16 16 0 0 1-16 16 H168 a16 16 0 0 1-16-16 Z" fill="#FFFFFF"/>
+    <rect x="150" y="336" width="252" height="14" rx="7" fill="#FFFFFF" opacity="0.9"/>
+    <circle cx="208" cy="320" r="30" fill="#1A2744"/><circle cx="208" cy="320" r="11" fill="#FFFFFF"/>
+    <circle cx="360" cy="320" r="30" fill="#1A2744"/><circle cx="360" cy="320" r="11" fill="#FFFFFF"/>
+    <circle cx="258" cy="240" r="47" fill="#1A2744"/>
+    <path d="M235 240 l15 15 l27 -32" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="540" y="450" text-anchor="middle" fill="#FFFFFF" font-size="46" font-weight="bold" letter-spacing="6">VAN<tspan fill="#4ECDC4">GUARD</tspan></text>
+  <text x="540" y="620" text-anchor="middle" fill="#FFFFFF" font-size="96" font-weight="bold">Bin the</text>
+  <text x="540" y="730" text-anchor="middle" fill="#FFFFFF" font-size="96" font-weight="bold">clipboard.</text>
+  <text x="540" y="835" text-anchor="middle" fill="#9FB3C8" font-size="40">Food safety records built for</text>
+  <text x="540" y="890" text-anchor="middle" fill="#9FB3C8" font-size="40">UK mobile caterers.</text>
+  <g>
+    <rect x="290" y="1000" width="500" height="96" rx="48" fill="#0D7377"/>
+    <text x="540" y="1061" text-anchor="middle" fill="#FFFFFF" font-size="40" font-weight="bold">Start your 14-day free trial</text>
+  </g>
+  <text x="540" y="1200" text-anchor="middle" fill="#4ECDC4" font-size="38" font-weight="bold" letter-spacing="2">vanguardapp.co.uk</text>
+</svg>

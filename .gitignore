@@ -1,0 +1,23 @@
+# Local Netlify folder
+.netlify
+
+# Node
+node_modules
+
+# Large local marketing assets / archives (kept locally, not in history)
+Marketing.zip
+*.zip
+*.tmp
+*.mov
+*.mp4
+zimIopf2
+lu4030mg2g.tmp
+
+# OS / editor cruft
+.~lock.*#
+.DS_Store
+
+# Local backups and development files
+_backup_*
+_logo_work
+_perm_test
