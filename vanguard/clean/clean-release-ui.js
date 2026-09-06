@@ -4,11 +4,10 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&l
 function getSession(){try{return JSON.parse(localStorage.getItem('vg_clean_session')||'null')}catch(_){return null}}
 const plans={starter:'Starter',business:'Business',pro:'Pro'};
 async function loadSubscription(){
- const el=document.getElementById('cleanReleasePanel'),s=getSession(); if(!el||!s?.user?.id||!window.api)return;
+ const el=document.getElementById('cleanReleasePanel'),s=getSession();if(!el||!s?.user?.id||!window.api)return;
  try{const rows=await window.api(`clean_subscriptions?user_id=eq.${s.user.id}&limit=1`),sub=rows?.[0];
-  if(!sub){el.innerHTML='<div class="notice"><b>Start your 14-day free trial</b><br>Your card is required at signup, but you will not be charged until the trial ends.</div>';return;}
-  const end=sub.trial_end?new Date(sub.trial_end):null,days=end?Math.max(0,Math.ceil((end-Date.now())/86400000)):null;
-  const status=sub.status==='trialing'?`Trial: ${days} day${days===1?'':'s'} remaining`:sub.status==='active'?'Active subscription':String(sub.status||'').replaceAll('_',' ');
+  if(!sub){el.innerHTML='<div class="card"><strong>Start your 14-day free trial</strong><p style="margin:6px 0 12px;color:#64748b">Your card is required at signup, but you will not be charged until the trial ends.</p><div id="cleanPlanChoices"></div></div>';if(window.VGCleanSubscription?.renderPlans)window.VGCleanSubscription.renderPlans('cleanPlanChoices',{email:s.user.email||'',userId:s.user.id});return;}
+  const end=sub.trial_end?new Date(sub.trial_end):null,days=end?Math.max(0,Math.ceil((end-Date.now())/86400000)):null,status=sub.status==='trialing'?`Trial: ${days} day${days===1?'':'s'} remaining`:sub.status==='active'?'Active subscription':String(sub.status||'').replaceAll('_',' ');
   el.innerHTML=`<div class="row"><div><strong>${esc(plans[sub.plan]||'Business')} plan</strong><small>${esc(status)}${sub.cancel_at_period_end?' · Cancels at period end':''}</small></div><span class="badge">${esc(sub.billing_interval||'month')}</span></div>`;
  }catch(_){el.innerHTML='<div class="notice">Subscription status will appear here after billing is connected.</div>';}
 }
