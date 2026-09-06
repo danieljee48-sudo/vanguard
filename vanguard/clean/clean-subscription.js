@@ -1,6 +1,6 @@
 /* VanGuard Clean — plans, trial and checkout helpers */
 (function(){'use strict';
-const PLANS={starter:{name:'Starter',monthly:9.99,yearly:99.90,sites:3},business:{name:'Business',monthly:24.99,yearly:249.90,sites:15},pro:{name:'Pro',monthly:49.99,yearly:499.90,sites:999}};
+const PLANS={starter:{name:'Starter',monthly:9.99,yearly:99.90,sites:3},business:{name:'Business',monthly:24.99,yearly:249.90,sites:15},pro:{name:'Pro',monthly:49.99,yearly:499.90,sites:999999}};
 const money=(v,c='GBP')=>new Intl.NumberFormat(undefined,{style:'currency',currency:c,minimumFractionDigits:2}).format(v);
 const trialCopy=(d=14)=>`${d}-day free trial. Your card is required at signup, but you won't be charged until the trial ends.`;
 async function startCheckout({plan='business',yearly=false,email='',userId=''}={}){if(!PLANS[plan])throw Error('Unknown plan');const r=await fetch('/.netlify/functions/clean-create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({priceType:yearly?'yearly':'monthly',email,user_id:userId,plan})});const d=await r.json().catch(()=>({}));if(!r.ok||!d.url)throw Error(d.error||'Unable to start checkout');location.href=d.url}
