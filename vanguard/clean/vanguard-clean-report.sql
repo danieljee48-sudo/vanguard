@@ -12,6 +12,8 @@ create table if not exists public.clean_report_snapshots (
 
 create unique index if not exists clean_report_record_unique
   on public.clean_report_snapshots(record_id);
+create unique index if not exists clean_report_number_unique
+  on public.clean_report_snapshots(report_number);
 create index if not exists clean_report_user_created_idx
   on public.clean_report_snapshots(user_id, created_at desc);
 
