@@ -26,7 +26,7 @@ drop policy if exists clean_subscriptions_select_own on public.clean_subscriptio
 create policy clean_subscriptions_select_own on public.clean_subscriptions
   for select using (auth.uid() = user_id);
 
--- Webhook/service-role writes bypass RLS. Keep INSERT/UPDATE/DELETE unavailable to browser clients.
+-- Browser clients can only read their own subscription. Service-role webhook writes bypass RLS.
 
 create or replace function public.clean_has_access(p_user_id uuid)
 returns boolean
