@@ -14,11 +14,17 @@
 - [x] Monthly / annual billing selection support
 - [x] Stripe subscription webhook
 - [x] Subscription status UI
+- [x] Subscription UI mounts after login as well as initial page load
 - [x] Early-access waitlist
 - [x] International defaults
+- [x] Clean app has explicit `/clean` and `/clean/*` routes
 
 ## Supabase
-Run the Clean schema and release-hardening migrations in order.
+Run the Clean schema and release migrations in order:
+1. `vanguard-clean-schema.sql`
+2. `clean-evidence-schema.sql`
+3. `vanguard-clean-report.sql`
+4. `clean-data-hardening.sql`
 
 Verify:
 - `clean_sites`
