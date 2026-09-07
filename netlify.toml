@@ -17,6 +17,11 @@
   status = 200
 
 [[redirects]]
+  from = "/clean"
+  to = "/clean/index.html"
+  status = 200
+
+[[redirects]]
   from = "/clean/waitlist"
   to = "/clean/waitlist.html"
   status = 200
