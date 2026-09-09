@@ -8,7 +8,7 @@ create table if not exists public.clean_subscriptions (
   stripe_subscription_id text unique,
   plan text not null default 'business' check (plan in ('starter','business','pro')),
   billing_interval text not null default 'month' check (billing_interval in ('month','year')),
-  status text not null default 'trialing' check (status in ('trialing','active','past_due','canceled','unpaid','incomplete','incomplete_expired')),
+  status text not null default 'trialing' check (status in ('trialing','active','past_due','canceled','unpaid','incomplete','incomplete_expired','paused')),
   trial_end timestamptz,
   current_period_end timestamptz,
   cancel_at_period_end boolean not null default false,
