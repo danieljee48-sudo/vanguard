@@ -1,7 +1,11 @@
 /* VanGuard Clean — release UI: activation, subscription status and billing CTA. */
 (function(){'use strict';
+const U='https://qzzwkxborlmmyaukvhga.supabase.co';
+const K='sb_publishable_0NmXA2uINNjhyGfZ0BCtGA_z_s2Q10z';
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 function getSession(){try{return JSON.parse(localStorage.getItem('vg_clean_session')||'null')}catch(_){return null}}
+async function bridgeApi(path,opts={}){const s=getSession(),token=s?.access_token||K;const r=await fetch(U+'/rest/v1/'+path,{...opts,headers:{apikey:K,Authorization:'Bearer '+token,'Content-Type':'application/json',Prefer:'return=representation',...(opts.headers||{})}});const text=await r.text();let data;try{data=JSON.parse(text)}catch{data=text}if(!r.ok)throw new Error(data?.message||data?.error_description||text||'Request failed');return data}
+window.api=window.api||bridgeApi;
 const plans={starter:'Starter',business:'Business',pro:'Pro'};
 let observerStarted=false;
 async function loadSubscription(){
@@ -10,7 +14,7 @@ async function loadSubscription(){
   const rows=await window.api(`clean_subscriptions?user_id=eq.${encodeURIComponent(s.user.id)}&order=updated_at.desc&limit=1`),sub=rows?.[0];
   if(!sub){
    el.innerHTML='<div class="card"><strong>Start your 14-day free trial</strong><p style="margin:6px 0 12px;color:#64748b">Your card is required at signup, but you will not be charged until the trial ends.</p><div id="cleanPlanChoices"></div></div>';
-   if(window.VGCleanSubscription?.renderPlans)window.VGCleanSubscription.renderPlans('cleanPlanChoices',{email:s.user.email||'',userId:s.user.id});
+   if(window.VGCleanSubscription?.renderPlans)window.VGCleanSubscription.renderPlans('cleanPlanChoices');
    return;
   }
   const end=sub.trial_end?new Date(sub.trial_end):null,days=end?Math.max(0,Math.ceil((end-Date.now())/86400000)):null;
