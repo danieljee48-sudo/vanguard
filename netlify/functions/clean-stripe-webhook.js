@@ -11,7 +11,7 @@ async function saveSubscription({ supabaseUrl, serviceKey, row }) {
 
 exports.handler=async(event)=>{
  if(event.httpMethod!=='POST')return{statusCode:405,body:'Method not allowed'};
- const secret=process.env.STRIPE_SECRET_KEY,webhookSecret=process.env.CLEAN_STRIPE_WEBHOOK_SECRET,supabaseUrl=process.env.SUPABASE_URL,serviceKey=process.env.SUPABASE_SERVICE_ROLE_KEY;
+ const secret=process.env.STRIPE_SECRET_KEY,webhookSecret=process.env.STRIPE_WEBHOOK_SECRET_2,supabaseUrl=process.env.SUPABASE_URL,serviceKey=process.env.SUPABASE_SERVICE_ROLE_KEY;
  if(!secret||!webhookSecret||!supabaseUrl||!serviceKey)return{statusCode:500,body:'Billing webhook is not configured.'};
  try{
   const stripe=Stripe(secret),signature=event.headers?.['stripe-signature']||event.headers?.['Stripe-Signature'];
