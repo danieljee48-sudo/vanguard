@@ -50,7 +50,7 @@ Confirm RLS is enabled and ordinary users cannot read another user's records. Co
 ## Netlify environment
 Required for production billing/webhooks:
 - `STRIPE_SECRET_KEY`
-- `CLEAN_STRIPE_WEBHOOK_SECRET`
+- `STRIPE_WEBHOOK_SECRET_2`
 - `CLEAN_STRIPE_STARTER_MONTHLY_PRICE_ID`
 - `CLEAN_STRIPE_STARTER_YEARLY_PRICE_ID`
 - `CLEAN_STRIPE_BUSINESS_MONTHLY_PRICE_ID`
