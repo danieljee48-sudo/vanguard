@@ -9,7 +9,9 @@ const PRICE_ENV = {
 const json=(statusCode,body)=>({statusCode,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
 
 async function authenticatedUser(event){
-  const supabaseUrl=process.env.SUPABASE_URL,serviceKey=process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseUrl=process.env.SUPABASE_URL;
+  // Support the existing Netlify variable name as well as the newer role-specific name.
+  const serviceKey=process.env.SUPABASE_SERVICE_ROLE_KEY||process.env.SUPABASE_SERVICE_KEY;
   const auth=event.headers?.authorization||event.headers?.Authorization||'';
   if(!supabaseUrl||!serviceKey)throw new Error('Authentication is not configured');
   if(!/^Bearer\s+\S+/i.test(auth))return null;
