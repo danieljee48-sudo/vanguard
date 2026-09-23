@@ -77,7 +77,7 @@
     btn.disabled=true;btn.textContent='Sending…';status.textContent='Preparing report and photos…';
     try{
       const d=await getRecordData(id);
-      const snap=window.VGCleanReport.makeReportSnapshot({companyName:'VanGuard Clean',site:d.site,checklist:d.checklist,record:d.record,items:d.items,issues:[],signoff:d.signoff,evidence:d.evidence});
+      const snap=window.VGCleanReport.makeReportSnapshot({companyName:'VanGuard Clean',site:d.site,checklist:d.checklist,record:d.record,items:d.items,issues:d.issues,signoff:d.signoff,evidence:d.evidence});
       const html=window.VGCleanReport.makeEmailHtml(snap,d.evidence);
       const attachments=d.evidence.slice(0,10).map((p,i)=>({path:p.url,filename:p.file_name||('evidence-'+(i+1)+'.jpg'),content_type:p.mime_type||'image/jpeg',content_id:'evidence-'+i}));
       const r=await fetch('/.netlify/functions/send-records',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to,subject,html,token:sess()?.access_token,attachments})});
