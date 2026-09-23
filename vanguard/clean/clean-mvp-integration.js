@@ -1,8 +1,37 @@
 /* VanGuard Clean — integrated MVP workflow. */
 (function(){'use strict';const U='https://qzzwkxborlmmyaukvhga.supabase.co';let active=null;const el=id=>document.getElementById(id);const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));const api=(...a)=>window.api(...a);const sess=()=>{try{return JSON.parse(localStorage.getItem('vg_clean_session')||'null')}catch(_){return null}};const uid=()=>sess()?.user?.id||'';
-window.startClean=async function(){try{const[s,c]=await Promise.all([api("clean_sites?active=eq.true&order=created_at.desc"),api("clean_checklists?active=eq.true&order=created_at.desc")]);window.openCleanStartModal(s,c)}catch(e){alert(e.message)}};
-window.beginRecord=async function(){try{const userId=uid();if(!userId)throw Error('Session expired. Please sign in again.');const sid=el('runSite').value,cid=el('runChecklist').value;const[s,c,items]=await Promise.all([api('clean_sites?active=eq.true'),api('clean_checklists?active=eq.true'),api(`clean_checklist_items?checklist_id=eq.${cid}&order=sort_order.asc`)]);const open=await api(`clean_records?site_id=eq.${sid}&checklist_id=eq.${cid}&status=eq.in_progress&limit=1`);let r=open[0];if(!r){const x=await api('clean_records',{method:'POST',body:JSON.stringify({user_id:userId,site_id:sid,checklist_id:cid,cleaner_name:el('runCleaner').value.trim()||'Cleaner',status:'in_progress'})});r=x[0]}const site=s.find(x=>x.id===sid)||{},list=c.find(x=>x.id===cid)||{};window.closeFormModal?.();window.showTab("runner");active=window.VGCleanRunner.makeRunner({site,checklist:list,items,recordId:r.id});const prior=await api(`clean_record_items?record_id=eq.${r.id}`);prior.forEach(p=>{const x=active.item(p.checklist_item_id);if(x){x.result=p.result;x.note=p.note||''}});active.state.generalNote=r.notes||'';renderRunner(r,site,list)}catch(e){alert(e.message)}};
-function updateRunnerProgress(){
+window.startClean=async function(){try{if(typeof window.openCleanStartModal!=='function')throw Error('Clean setup is still loading. Refresh the page and try again.');const[s,c]=await Promise.all([api("clean_sites?active=eq.true&order=created_at.desc"),api("clean_checklists?active=eq.true&order=created_at.desc")]);window.openCleanStartModal(s,c)}catch(e){alert(e.message||'Could not load cleaning setup.')}};
+window.beginRecord=async function(){
+  const btn=[...document.querySelectorAll('#formModal button')].find(b=>b.textContent.trim()==='Begin cleaning');
+  const restore=()=>{if(btn){btn.disabled=false;btn.textContent='Begin cleaning'}};
+  try{
+    if(!window.VGCleanRunner?.makeRunner)throw Error('Cleaning workflow is still loading. Please wait a moment and try again.');
+    const userId=uid();if(!userId)throw Error('Session expired. Please sign in again.');
+    const siteEl=el('runSite'),checklistEl=el('runChecklist');
+    if(!siteEl||!checklistEl)throw Error('Cleaning setup could not be read. Please close it and try again.');
+    const sid=siteEl.value,cid=checklistEl.value,cleaner=el('runCleaner')?.value.trim()||'Cleaner';
+    if(!sid)throw Error('Choose a site before beginning the clean.');
+    if(!cid)throw Error('Choose a checklist before beginning the clean.');
+    if(btn){btn.disabled=true;btn.textContent='Starting…'}
+    const[s,c,items]=await Promise.all([
+      api('clean_sites?id=eq.'+encodeURIComponent(sid)+'&user_id=eq.'+encodeURIComponent(userId)+'&active=eq.true&limit=1'),
+      api('clean_checklists?id=eq.'+encodeURIComponent(cid)+'&user_id=eq.'+encodeURIComponent(userId)+'&active=eq.true&limit=1'),
+      api('clean_checklist_items?checklist_id=eq.'+encodeURIComponent(cid)+'&order=sort_order.asc')
+    ]);
+    if(!s[0])throw Error('That site could not be found. Refresh and choose it again.');
+    if(!c[0])throw Error('That checklist could not be found. Refresh and choose it again.');
+    if(!items.length)throw Error('This checklist has no tasks. Add at least one task before starting a clean.');
+    const open=await api('clean_records?user_id=eq.'+encodeURIComponent(userId)+'&site_id=eq.'+encodeURIComponent(sid)+'&checklist_id=eq.'+encodeURIComponent(cid)+'&status=eq.in_progress&order=created_at.desc&limit=1');
+    let r=open[0];
+    if(!r){const x=await api('clean_records',{method:'POST',body:JSON.stringify({user_id:userId,site_id:sid,checklist_id:cid,cleaner_name:cleaner,status:'in_progress',started_at:new Date().toISOString()})});r=x?.[0];if(!r)throw Error('The cleaning record could not be created. Please try again.');}
+    window.closeFormModal?.();window.showTab('runner');
+    active=window.VGCleanRunner.makeRunner({site:s[0],checklist:c[0],items,recordId:r.id});
+    const prior=await api('clean_record_items?record_id=eq.'+encodeURIComponent(r.id)+'&order=created_at.asc');
+    prior.forEach(p=>{const x=active.item(p.checklist_item_id);if(x){x.result=p.result||'pending';x.note=p.note||''}});
+    active.state.generalNote=r.notes||'';active.state.startedAt=r.started_at||active.state.startedAt;
+    renderRunner(r,s[0],c[0]);
+  }catch(e){restore();alert(e.message||'Could not begin the clean.')}
+};function updateRunnerProgress(){
   if(!active)return;
   const check=active.validation();
   const fill=el('runnerProgressFill'),text=el('runnerProgressText');
@@ -44,8 +73,8 @@ function renderRunner(r,site,list){
       row.querySelector('.photo-preview-note').textContent='Photo saved ✓';input.dataset.uploaded='true';
     }catch(e){input.value='';alert(e.message)}
   });
-  el('completeCleanBtn').onclick=()=>window.completeRecord(r.id);
-  el('saveCleanBtn').onclick=()=>window.saveCleanForLater(r.id);
+  el('completeCleanBtn').onclick=async()=>{const b=el('completeCleanBtn');if(b.disabled)return;b.disabled=true;b.textContent='Completing…';try{await window.completeRecord(r.id)}finally{if(document.getElementById('completeCleanBtn')){document.getElementById('completeCleanBtn').disabled=false;document.getElementById('completeCleanBtn').textContent='Complete clean'}}};
+  el('saveCleanBtn').onclick=async()=>{const b=el('saveCleanBtn');b.disabled=true;b.textContent='Saving…';try{await window.saveCleanForLater(r.id)}finally{if(document.getElementById('saveCleanBtn')){document.getElementById('saveCleanBtn').disabled=false;document.getElementById('saveCleanBtn').textContent='Save & resume later'}}};
   updateRunnerProgress();
 }
 async function upsertRecordItem(id,p){const old=(await api(`clean_record_items?record_id=eq.${id}&checklist_item_id=eq.${p.checklist_item_id}&limit=1`))[0];if(old)return (await api(`clean_record_items?id=eq.${old.id}`,{method:'PATCH',body:JSON.stringify(p)}))[0];return (await api('clean_record_items',{method:'POST',body:JSON.stringify(p)}))[0]}
