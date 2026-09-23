@@ -9,12 +9,13 @@
   function fmt(v){return v?new Date(v).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'}):'—'}
   function statusClass(s){return s==='completed'?'ok':s==='flagged'?'warn':'neutral'}
   async function getRecordData(id){
-    const [r,sites,lists,items,evidence,signoffs]=await Promise.all([
+    const [r,sites,lists,items,evidence,issues,signoffs]=await Promise.all([
       api('clean_records?id=eq.'+encodeURIComponent(id)+'&limit=1'),
       api('clean_sites?active=eq.true'),
       api('clean_checklists?active=eq.true'),
       api('clean_record_items?record_id=eq.'+encodeURIComponent(id)+'&order=created_at.asc'),
       api('clean_evidence?record_id=eq.'+encodeURIComponent(id)+'&order=captured_at.asc'),
+      api('clean_issues?record_id=eq.'+encodeURIComponent(id)+'&order=created_at.asc'),
       api('clean_signoffs?record_id=eq.'+encodeURIComponent(id)+'&limit=1')
     ]);
     if(!r[0])throw new Error('Cleaning record not found.');
@@ -27,7 +28,7 @@
         photoUrls.push({...p,url});
       }catch(_){}
     }
-    return {record,site,checklist,items,evidence:photoUrls,signoff:signoffs[0]||null};
+    return {record,site,checklist,items,evidence:photoUrls,issues,signoff:signoffs[0]||null};
   }
   function ensureModal(){
     if(el('recordModal'))return el('recordModal');
@@ -51,7 +52,7 @@
         '<div class="detail-grid"><div><small>Checklist</small><strong>'+esc(d.checklist.name||'—')+'</strong></div><div><small>Cleaner</small><strong>'+esc(d.record.cleaner_name||'—')+'</strong></div><div><small>Started</small><strong>'+fmt(d.record.started_at)+'</strong></div><div><small>Completed</small><strong>'+fmt(d.record.completed_at)+'</strong></div></div>'+
         '<h3>Checklist results</h3><div class="history-items">'+d.items.map(x=>'<div class="history-item"><div><strong>'+esc(x.label)+'</strong>'+(x.note?'<small>'+esc(x.note)+'</small>':'')+'</div><span class="status-pill '+statusClass(x.result)+'">'+esc(x.result==='na'?'N/A':x.result)+'</span></div>').join('')+'</div>'+
         '<h3>Photos & evidence</h3>'+photoGallery(d.evidence)+
-        (d.record.notes?'<h3>Notes</h3><p class="modal-copy">'+esc(d.record.notes)+'</p>':'')+
+        (d.issues.length?'<h3>Issues & corrective actions</h3><div class="history-items">'+d.issues.map(x=>'<div class="history-item"><div><strong>'+esc(x.title)+'</strong><small>'+esc(x.description||'')+'</small></div><span class="status-pill '+statusClass(x.status)+'">'+esc(x.status)+'</span></div>').join('')+'</div>':'')+(d.record.notes?'<h3>Notes</h3><p class="modal-copy">'+esc(d.record.notes)+'</p>':'')+
         (d.signoff?'<div class="signoff-box"><strong>Signed off by '+esc(d.signoff.signer_name)+'</strong><span>'+esc(d.signoff.signer_role||'')+' · '+fmt(d.signoff.signed_at)+'</span></div>':'')+
         '<div class="modal-actions"><button class="btn" type="button" id="modalReportBtn">View / print report</button><button class="btn secondary" type="button" id="modalEmailBtn">Email report</button></div>';
       el('modalReportBtn').onclick=async()=>{m.classList.add('hidden');await window.openRecordReport(id)};
@@ -60,7 +61,7 @@
   }
   async function openRecordReport(id){
     const d=await getRecordData(id);
-    const snap=window.VGCleanReport.makeReportSnapshot({companyName:'VanGuard Clean',site:d.site,checklist:d.checklist,record:d.record,items:d.items,issues:[],signoff:d.signoff,evidence:d.evidence});
+    const snap=window.VGCleanReport.makeReportSnapshot({companyName:'VanGuard Clean',site:d.site,checklist:d.checklist,record:d.record,items:d.items,issues:[],signoff:d.signoff,issues:d.issues,evidence:d.evidence});
     window.VGCleanReport.renderPrintable(snap,d.evidence);
   }
   function showEmailForm(id){
