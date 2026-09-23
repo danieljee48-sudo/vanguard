@@ -11,8 +11,8 @@
   async function getRecordData(id){
     const [r,sites,lists,items,evidence,issues,signoffs]=await Promise.all([
       api('clean_records?id=eq.'+encodeURIComponent(id)+'&limit=1'),
-      api('clean_sites?active=eq.true'),
-      api('clean_checklists?active=eq.true'),
+      api('clean_sites?order=created_at.desc'),
+      api('clean_checklists?order=created_at.desc'),
       api('clean_record_items?record_id=eq.'+encodeURIComponent(id)+'&order=created_at.asc'),
       api('clean_evidence?record_id=eq.'+encodeURIComponent(id)+'&order=captured_at.asc'),
       api('clean_issues?record_id=eq.'+encodeURIComponent(id)+'&order=created_at.asc'),
