@@ -25,7 +25,7 @@ async function login(){
   localStorage.setItem('vg_clean_session',JSON.stringify(data));
   message('Signed in. Loading your workspace…');
   if(typeof window.boot!=='function')throw new Error('Workspace loader is not available. Please refresh the page.');
-  window.session=data;
+  if(typeof window.setCleanSession==='function')window.setCleanSession(data);else throw new Error('Workspace session bridge is not available. Please refresh the page.');
   await window.boot();
  }catch(e){
   message(e?.message||'Sign in failed.');
