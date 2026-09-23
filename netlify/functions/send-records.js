@@ -20,9 +20,9 @@ exports.handler = async (event) => {
     return reply(405, { error: 'Method Not Allowed' });
   }
 
-  let to, subject, html, token;
+  let to, subject, html, token, attachments;
   try {
-    ({ to, subject, html, token } = JSON.parse(event.body || '{}'));
+    ({ to, subject, html, token, attachments } = JSON.parse(event.body || '{}'));
   } catch {
     return reply(400, { error: 'Bad request' });
   }
@@ -30,13 +30,17 @@ exports.handler = async (event) => {
   if (!to || !html) {
     return reply(400, { error: 'Recipient and report content are required' });
   }
+  if (attachments !== undefined && (!Array.isArray(attachments) || attachments.length > 10)) {
+    return reply(400, { error: 'Too many report attachments' });
+  }
+  const safeAttachments = (attachments || []).map(a => ({ path: String(a.path || ''), filename: String(a.filename || 'evidence.jpg').replace(/[^a-zA-Z0-9._-]/g, '_').slice(0,120), content_type: String(a.content_type || 'image/jpeg'), content_id: String(a.content_id || '').slice(0,100) })).filter(a => /^https:\/\/qzzwkxborlmmyaukvhga\.supabase\.co\/storage\/v1\/object\/sign\/clean-evidence\//.test(a.path));
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to)) {
     return reply(400, { error: "That doesn't look like a valid email address" });
   }
 
   // Only allow signed-in users to send (prevents anonymous abuse of the endpoint).
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const KEY = process.env.SUPABASE_SERVICE_KEY;
+  const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
   try {
     const u = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       headers: { apikey: KEY, Authorization: `Bearer ${token || ''}` },
@@ -60,6 +64,7 @@ exports.handler = async (event) => {
         to: [to],
         subject: subject || 'Food Safety Records',
         html,
+        attachments: safeAttachments,
       }),
     });
     if (!res.ok) {
