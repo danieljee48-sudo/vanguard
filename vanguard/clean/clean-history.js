@@ -61,7 +61,7 @@
   }
   async function openRecordReport(id){
     const d=await getRecordData(id);
-    const snap=window.VGCleanReport.makeReportSnapshot({companyName:'VanGuard Clean',site:d.site,checklist:d.checklist,record:d.record,items:d.items,issues:[],signoff:d.signoff,issues:d.issues,evidence:d.evidence});
+    const snap=window.VGCleanReport.makeReportSnapshot({companyName:'VanGuard Clean',site:d.site,checklist:d.checklist,record:d.record,items:d.items,issues:d.issues,signoff:d.signoff,evidence:d.evidence});
     window.VGCleanReport.renderPrintable(snap,d.evidence);
   }
   function showEmailForm(id){
