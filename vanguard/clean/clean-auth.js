@@ -24,17 +24,15 @@ async function login(){
   if(!data.access_token||!data.user?.id)throw new Error('Supabase returned no valid login session.');
   localStorage.setItem('vg_clean_session',JSON.stringify(data));
   message('Signed in. Loading your workspace…');
-  location.reload();
+  if(typeof window.boot!=='function')throw new Error('Workspace loader is not available. Please refresh the page.');
+  window.session=data;
+  await window.boot();
  }catch(e){
   message(e?.message||'Sign in failed.');
   if(btn){btn.disabled=false;btn.textContent='Sign in'}
  }
 }
 function wire(){
- const btn=Array.from(document.querySelectorAll('#login button')).find(x=>x.textContent.trim()==='Sign in');
- if(btn)btn.addEventListener('click',function(e){e.preventDefault();login()});
- const form=el('email')?.closest('.form');
- if(form)form.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();login()}});
  window.__VGCleanAuthLoaded=true;
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire);else wire();
