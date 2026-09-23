@@ -40,7 +40,7 @@ exports.handler = async (event) => {
 
   // Only allow signed-in users to send (prevents anonymous abuse of the endpoint).
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const KEY = process.env.SUPABASE_SERVICE_KEY;
+  const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
   try {
     const u = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       headers: { apikey: KEY, Authorization: `Bearer ${token || ''}` },
