@@ -92,26 +92,39 @@ window.reviewClean=async function(recordId,decision){
   const s=session();
   await raw('clean_reviews',{method:'POST',body:JSON.stringify({workspace_id:ctx.workspaceId,record_id:recordId,reviewer_id:s.user.id,decision,notes})});
   const patch=decision==='approved'
-   ? {status:'completed',reviewed_by:s.user.id,reviewed_at:new Date().toISOString(),review_notes:notes||null,completed_at:new Date().toISOString()}
+   ? {status:'completed',reviewed_by:ctx.memberUserId,reviewed_at:new Date().toISOString(),review_notes:notes||null,completed_at:new Date().toISOString()}
    : {status:'changes_required',reviewed_by:s.user.id,reviewed_at:new Date().toISOString(),review_notes:notes||null};
   await raw('clean_records?id=eq.'+encodeURIComponent(recordId),{method:'PATCH',body:JSON.stringify(patch)});
   alert(decision==='approved'?'Clean approved.':'Changes requested.');
   await loadTeam();if(window.loadAll)await window.loadAll();
  }catch(e){alert(e.message||'Could not review the clean.')}
 };
+function patchCompletion(){
+ if(!ctx||ctx.role!=='cleaner'||!window.completeRecord||originalCompleteRecord)return;
+ originalCompleteRecord=window.completeRecord;
+ window.completeRecord=async function(id){
+   await originalCompleteRecord(id);
+   try{
+     await raw('clean_records?id=eq.'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({status:'pending_review',submitted_at:new Date().toISOString(),completed_by:ctx.memberUserId,reviewed_by:null,reviewed_at:null,review_notes:null})});
+     const body=document.getElementById('runnerBody');
+     if(body)body.innerHTML='<div class="notice">Clean submitted for manager approval.</div><div class="actions"><button class="btn secondary" type="button" onclick="window.showTab(\\'records\\')">Back to records</button></div>';
+     await window.loadAll?.();
+   }catch(e){alert(e.message||'Could not submit the clean for review.')}
+ };
+}
 const originalBoot=window.boot;
 if(originalBoot){
  window.boot=async function(){
    await hydrate();
    const result=await originalBoot.apply(this,arguments);
-   ensureTeamTab();hideForCleaner();
+   ensureTeamTab();hideForCleaner();patchCompletion();
    return result;
  };
 }
 window.addEventListener('load',function(){
  setTimeout(async()=>{
    await hydrate();
-   ensureTeamTab();hideForCleaner();
+   ensureTeamTab();hideForCleaner();patchCompletion();
    if(ctx&&isManager()&&document.getElementById('teamPanel'))loadTeam();
  },50);
 });
