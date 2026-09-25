@@ -7,7 +7,7 @@ async function authenticatedUser(event){
   const serviceKey=process.env.SUPABASE_SERVICE_ROLE_KEY||process.env.SUPABASE_SERVICE_KEY;
   const auth=event.headers?.authorization||event.headers?.Authorization||'';
   if(!supabaseUrl||!serviceKey)throw new Error('Authentication is not configured');
-  if(!/^Bearer\\s+\\S+/i.test(auth))return null;
+  if(!/^Bearer\s+\S+/i.test(auth))return null;
   const r=await fetch(`${supabaseUrl}/auth/v1/user`,{headers:{apikey:serviceKey,Authorization:auth}});
   if(!r.ok)return null;
   return r.json();
