@@ -105,7 +105,7 @@ function patchCompletion(){
  window.completeRecord=async function(id){
    await originalCompleteRecord(id);
    try{
-     await raw('clean_records?id=eq.'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({status:'pending_review',submitted_at:new Date().toISOString(),completed_by:ctx.memberUserId,reviewed_by:null,reviewed_at:null,review_notes:null})});
+     await raw('clean_records?id=eq.'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({status:'pending_review',submitted_at:new Date().toISOString(),completed_by:ctx.memberUserId,reviewed_by:null,reviewed_at:null,review_notes:null,completed_at:null})});
      const body=document.getElementById('runnerBody');
      if(body)body.innerHTML='<div class="notice">Clean submitted for manager approval.</div><div class="actions"><button class="btn secondary" type="button" onclick="window.showTab(\\'records\\')">Back to records</button></div>';
      await window.loadAll?.();
