@@ -27,11 +27,11 @@ exports.handler=async(event)=>{
     if(!r.ok)throw new Error('Could not load your billing account');
     const rows=await r.json();
     const customerId=rows?.[0]?.stripe_customer_id;
-    if(!customerId) return json(400,{error:'No billing account is linked to this workspace yet. Start your trial first.'});
+    if(!customerId) return json(400,{error:'No billing account is linked to this workspace yet. Choose a paid plan first.'});
     const stripe=Stripe(secret);
     const portal=await stripe.billingPortal.sessions.create({
       customer:customerId,
-      return_url:`${process.env.URL||'https://vanguardapp.co.uk'}/clean`
+      return_url:`${process.env.URL||'https://vanguardapp.co.uk'}/clean/app`
     });
     return json(200,{url:portal.url});
   }catch(e){
