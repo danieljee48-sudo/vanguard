@@ -26,7 +26,6 @@ async function hydrate(){
   s.cleanContext=ctx;
   /* The existing MVP queries filter by user_id. For team members, point that
      compatibility filter at the workspace owner while the JWT remains the cleaner. */
-  s.user.id=ctx.ownerUserId;
   save(s);
   return ctx;
  }catch(e){console.warn('Clean team context unavailable',e);return null}
