@@ -42,8 +42,8 @@ exports.handler = async (event) => {
       client_reference_id: user.id,
       subscription_data: { trial_period_days: 14, metadata: { product:'vanguard-clean', user_id:user.id, plan } },
       metadata: { product:'vanguard-clean', user_id:user.id, plan },
-      success_url: `${process.env.URL || 'https://vanguardapp.co.uk'}/clean?checkout=success`,
-      cancel_url: `${process.env.URL || 'https://vanguardapp.co.uk'}/clean?checkout=cancelled`
+      success_url: `${process.env.URL || 'https://vanguardapp.co.uk'}/clean/app?checkout=success`,
+      cancel_url: `${process.env.URL || 'https://vanguardapp.co.uk'}/clean/app?checkout=cancelled`
     });
     return json(200,{url:session.url});
   } catch (e) {
