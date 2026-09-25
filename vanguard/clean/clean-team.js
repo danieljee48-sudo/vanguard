@@ -38,8 +38,8 @@ function statusClass(s){return s==='completed'?'ok':(['pending_review','changes_
 function dateText(v){return v?new Date(v).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'}):'No due date'}
 
 function ensureTeamTab(){
- const tabs=document.querySelector('.tabs');if(!tabs||!isTeam()||document.getElementById('teamTab'))return;
- const b=document.createElement('button');b.className='tab';b.dataset.tab='team';b.id='teamTab';b.textContent=isManager()?'Team':'My work';b.onclick=()=>window.showTeamTab?.();
+ const tabs=document.querySelector('.tabs');if(!tabs||document.getElementById('teamTab'))return;
+ const b=document.createElement('button');b.className='tab';b.dataset.tab='team';b.id='teamTab';b.textContent=isTeam()?(isManager()?'Team':'My work'):'Team';if(!isTeam()){b.classList.add('locked');b.title='Upgrade to Business or Pro to unlock team tools';b.onclick=()=>window.showTeamUpgrade?.();}else b.onclick=()=>window.showTeamTab?.();
  tabs.appendChild(b);
  const host=document.querySelector('main')||document.getElementById('app');
  if(host&&!document.getElementById('team')){
@@ -132,6 +132,19 @@ window.startAssignedClean=async function(id){
   await window.openCleanStartModal(data.sites,data.checklists,a.site_id,a.checklist_id,ctx.displayName||'');
   const hidden=document.createElement('input');hidden.type='hidden';hidden.id='assignmentId';hidden.value=a.id;document.getElementById('formModalBody')?.appendChild(hidden);
  }catch(e){alert(e.message||'Could not open assigned clean.')}
+};
+window.showTeamUpgrade=async function(){
+ ensureTeamTab();
+ document.querySelectorAll('.tabpage').forEach(x=>x.classList.add('hidden'));
+ document.getElementById('team')?.classList.remove('hidden');
+ document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab==='team'));
+ document.getElementById('pageTitle').textContent='Team tools';
+ document.getElementById('subTitle').textContent='Upgrade to unlock cleaners, assignments and manager approvals.';
+ const panel=document.getElementById('teamPanel');
+ if(panel){
+  panel.innerHTML='<div class="eyebrow">Upgrade</div><h2>Team management is locked</h2><p class="modal-copy">Business and Pro add admin logins, cleaner accounts, job assignments and manager approval. Your current plan keeps the core cleaning tools available for a single login.</p><div id="teamUpgradeChoices"></div>';
+  window.VGCleanSubscription?.renderPlans?.('teamUpgradeChoices');
+ }
 };
 window.showTeamTab=async function(){
  ensureTeamTab();document.querySelectorAll('.tabpage').forEach(x=>x.classList.add('hidden'));document.getElementById('team')?.classList.remove('hidden');
