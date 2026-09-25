@@ -26,9 +26,9 @@ exports.handler=async(event)=>{
     const role=body.role==='admin'?'admin':'cleaner';
     if(!email||!email.includes('@'))return json(400,{error:'Enter a valid email address.'});
     if(!displayName)return json(400,{error:'Enter a name.'});
-    const created=await sb('/auth/v1/admin/users',{method:'POST',body:JSON.stringify({email,email_confirm:true,user_metadata:{product:'clean',name:displayName,workspace_id:membership.workspace_id,role}})});
+    const created=await sb('/auth/v1/admin/invite',{method:'POST',body:JSON.stringify({email,data:{product:'clean',name:displayName,workspace_id:membership.workspace_id,role},redirect_to:'https://vanguardapp.co.uk/clean/app'})});
     const user=created?.user||created;
-    if(!user?.id)throw new Error('Supabase did not return the new user.');
+    if(!user?.id)throw new Error('Supabase did not return the invited user.');
     await sb('/rest/v1/clean_memberships',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify({workspace_id:membership.workspace_id,user_id:user.id,role,display_name:displayName,active:true})});
     return json(200,{id:user.id,email:user.email,display_name:displayName,role});
   }catch(e){return json(400,{error:e.message||'Could not create team member.'})}
