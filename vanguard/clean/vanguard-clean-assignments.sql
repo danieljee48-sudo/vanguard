@@ -14,7 +14,8 @@ create table if not exists public.clean_assignments (
   notes text,
   created_at timestamptz not null default now(),
   started_at timestamptz,
-  completed_at timestamptz
+  completed_at timestamptz,
+  record_id uuid references public.clean_records(id) on delete set null
 );
 
 alter table public.clean_assignments enable row level security;
@@ -67,3 +68,6 @@ using (
 -- Keep team membership useful for the signed-in owner/member even when the
 -- workspace resolver is being evaluated for the first time.
 grant select on public.clean_memberships to authenticated;
+
+alter table public.clean_assignments add column if not exists record_id uuid references public.clean_records(id) on delete set null;
+create index if not exists clean_assignments_record_idx on public.clean_assignments(record_id);
