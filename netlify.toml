@@ -28,7 +28,12 @@
 
 [[redirects]]
   from = "/clean"
-  to = "/clean/index.html"
+  to = "/clean/landing.html"
+  status = 200
+
+[[redirects]]
+  from = "/clean/"
+  to = "/clean/landing.html"
   status = 200
 
 [[redirects]]
@@ -37,6 +42,16 @@
   status = 200
 
 [[redirects]]
-  from = "/clean/*"
-  to = "/clean/index.html"
+  from = "/clean/app"
+  to = "/clean/app/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/clean/app/*"
+  to = "/clean/app/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/food"
+  to = "/food/index.html"
   status = 200
