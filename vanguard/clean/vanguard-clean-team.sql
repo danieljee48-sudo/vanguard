@@ -77,7 +77,7 @@ returns trigger language plpgsql security definer set search_path=''
 as $$
 declare wid uuid; display_name text;
 begin
-  if coalesce(new.raw_user_meta_data->>'product','') <> 'clean' then return new; end if;
+  if coalesce(new.raw_user_meta_data->>'product','') <> 'clean' or coalesce(new.raw_user_meta_data->>'team_invite','false')='true' then return new; end if;
   insert into public.clean_workspaces(owner_user_id,name)
   values(new.id,coalesce(nullif(new.raw_user_meta_data->>'company_name',''),'My Cleaning Business'))
   on conflict (owner_user_id) do nothing returning id into wid;
