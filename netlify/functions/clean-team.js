@@ -18,7 +18,10 @@ exports.handler=async(event)=>{
     const members=await sb('/rest/v1/clean_memberships?user_id=eq.'+encodeURIComponent(me.id)+'&active=eq.true&select=workspace_id,role');
     const membership=members?.[0];
     if(!membership||!['owner','admin'].includes(membership.role))return json(403,{error:'Only the workspace owner or admin can manage the team.'});
-    const subs=await sb('/rest/v1/clean_subscriptions?user_id=eq.'+encodeURIComponent(me.id)+'&status=in.(active,trialing,past_due,incomplete)&select=plan&limit=1');
+    const ws=await sb('/rest/v1/clean_workspaces?id=eq.'+encodeURIComponent(membership.workspace_id)+'&select=owner_user_id&limit=1');
+    const ownerUserId=ws?.[0]?.owner_user_id;
+    if(!ownerUserId)return json(400,{error:'Workspace owner could not be found.'});
+    const subs=await sb('/rest/v1/clean_subscriptions?user_id=eq.'+encodeURIComponent(ownerUserId)+'&status=in.(active,trialing,past_due,incomplete)&select=plan&limit=1');
     if(!subs?.[0]||!['business','pro'].includes(subs[0].plan))return json(403,{error:'Team logins are available on Business and Pro plans.'});
     const body=JSON.parse(event.body||'{}');
     const email=String(body.email||'').trim().toLowerCase();
