@@ -5,6 +5,22 @@ const KEY='sb_publishable_0NmXA2uINNjhyGfZ0BCtGA_z_s2Q10z';
 function el(id){return document.getElementById(id)}
 function message(text){const x=el('authmsg');if(x)x.textContent=text||''}
 function fields(){return {email:(el('email')?.value||'').trim(),password:el('password')?.value||''}}
+async function refreshSession(){
+ const current=(()=>{try{return JSON.parse(localStorage.getItem('vg_clean_session')||'null')}catch(_){return null}})();
+ const refreshToken=current?.refresh_token;
+ if(!refreshToken)return null;
+ const response=await fetch(URL+'/auth/v1/token?grant_type=refresh_token',{
+  method:'POST',
+  headers:{apikey:KEY,'Content-Type':'application/json'},
+  body:JSON.stringify({refresh_token:refreshToken})
+ });
+ const raw=await response.text();let data={};try{data=raw?JSON.parse(raw):{}}catch(_){}
+ if(!response.ok||!data.access_token||!data.user?.id)throw new Error(data.msg||data.message||data.error_description||'Your session has expired. Please sign in again.');
+ localStorage.setItem('vg_clean_session',JSON.stringify(data));
+ if(typeof window.setCleanSession==='function')window.setCleanSession(data);
+ return data;
+}
+window.refreshCleanSession=refreshSession;
 async function login(){
  const btn=Array.from(document.querySelectorAll('#login button')).find(x=>x.textContent.trim()==='Sign in');
  const f=fields();
