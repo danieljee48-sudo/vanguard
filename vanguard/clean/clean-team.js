@@ -1,11 +1,9 @@
-/* VanGuard Clean — team roles and manager workflow.
- * Business/Pro only.
- */
+/* VanGuard Clean — team roles, assignments and manager workflow. */
 (function(){
 'use strict';
 const U='https://qzzwkxborlmmyaukvhga.supabase.co';
 const K='sb_publishable_0NmXA2uINNjhyGfZ0BCtGA_z_s2Q10z';
-let ctx=null, originalCompleteRecord=null, bootPatched=false;
+let ctx=null;
 
 function session(){try{return JSON.parse(localStorage.getItem('vg_clean_session')||'null')}catch(_){return null}}
 function save(s){localStorage.setItem('vg_clean_session',JSON.stringify(s))}
@@ -27,90 +25,119 @@ async function hydrate(){
   const ownerUserId=ws[0].owner_user_id;
   const subs=await raw('clean_subscriptions?user_id=eq.'+encodeURIComponent(ownerUserId)+'&status=in.(active,trialing,past_due,incomplete)&select=plan,status&order=updated_at.desc&limit=1');
   const plan=subs?.[0]?.plan||'free';
-  ctx={
-   workspaceId:m.workspace_id,
-   role:m.role,
-   displayName:m.display_name||'',
-   memberUserId:s.user.id,
-   ownerUserId,
-   workspaceName:ws[0].name||'Workspace',
-   plan,
-   teamEnabled:['business','pro'].includes(plan)
-  };
+  ctx={workspaceId:m.workspace_id,role:m.role,displayName:m.display_name||'',memberUserId:s.user.id,ownerUserId,workspaceName:ws[0].name||'Workspace',plan,teamEnabled:['business','pro'].includes(plan)};
   s.cleanContext=ctx;save(s);
   return ctx;
  }catch(e){console.warn('Clean team context unavailable',e);return null}
 }
-function isTeam(){return !!ctx&&ctx.teamEnabled}
-function isManager(){return !!ctx&&ctx.teamEnabled&&['owner','admin'].includes(ctx.role)}
-function isOwner(){return !!ctx&&ctx.role==='owner'}
+function isTeam(){return !!ctx?.teamEnabled}
+function isManager(){return !!ctx?.teamEnabled&&['owner','admin'].includes(ctx.role)}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function statusLabel(s){return ({assigned:'Assigned',in_progress:'In progress',pending_review:'Awaiting approval',changes_required:'Changes requested',completed:'Completed',cancelled:'Cancelled'})[s]||s}
+function statusClass(s){return s==='completed'?'ok':(['pending_review','changes_required'].includes(s)?'warn':'')}
+function dateText(v){return v?new Date(v).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'}):'No due date'}
+
 function ensureTeamTab(){
  const tabs=document.querySelector('.tabs');if(!tabs||!isTeam()||document.getElementById('teamTab'))return;
- const b=document.createElement('button');b.className='tab';b.dataset.tab='team';b.id='teamTab';
- b.textContent=isManager()?'Team':'My work';b.onclick=()=>window.showTeamTab?.();
+ const b=document.createElement('button');b.className='tab';b.dataset.tab='team';b.id='teamTab';b.textContent=isManager()?'Team':'My work';b.onclick=()=>window.showTeamTab?.();
  tabs.appendChild(b);
  const host=document.querySelector('main')||document.getElementById('app');
  if(host&&!document.getElementById('team')){
-   const page=document.createElement('section');page.id='team';page.className='tabpage hidden';
-   page.innerHTML='<div class="card" id="teamPanel"><div class="loading-state">Loading team workspace…</div></div>';
-   host.appendChild(page);
+  const page=document.createElement('section');page.id='team';page.className='tabpage hidden';
+  page.innerHTML='<div class="card" id="teamPanel"><div class="loading-state">Loading team workspace…</div></div>';
+  host.appendChild(page);
  }
 }
 function hideForCleaner(){
  if(!ctx||ctx.role!=='cleaner')return;
- document.querySelectorAll('.tabs .tab').forEach(b=>{
-   const allowed=['dashboard','records','team'];
-   if(!allowed.includes(b.dataset.tab))b.classList.add('hidden');
- });
- const start=document.querySelector('.hero .btn');
- if(start){start.textContent='Start assigned clean';}
+ document.querySelectorAll('.tabs .tab').forEach(b=>{if(!['dashboard','records','team'].includes(b.dataset.tab))b.classList.add('hidden')});
  const title=document.getElementById('pageTitle'),sub=document.getElementById('subTitle');
  if(title)title.textContent='My cleaning work';
- if(sub)sub.textContent='Complete your cleaning records and submit them for manager approval.';
+ if(sub)sub.textContent='Complete assigned cleans and submit them for manager approval.';
 }
-function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function statusLabel(s){
- return ({in_progress:'In progress',pending_review:'Awaiting approval',changes_required:'Changes requested',completed:'Approved',flagged:'Flagged'})[s]||s;
+async function getTeamData(){
+ const [members,assignments,sites,lists,pending]=await Promise.all([
+  raw('clean_memberships?workspace_id=eq.'+encodeURIComponent(ctx.workspaceId)+'&active=eq.true&order=role.asc,created_at.asc'),
+  raw('clean_assignments?workspace_id=eq.'+encodeURIComponent(ctx.workspaceId)+'&status=neq.cancelled&order=due_at.asc,created_at.desc&limit=100'),
+  raw('clean_sites?workspace_id=eq.'+encodeURIComponent(ctx.workspaceId)+'&active=eq.true&order=site_name.asc'),
+  raw('clean_checklists?workspace_id=eq.'+encodeURIComponent(ctx.workspaceId)+'&active=eq.true&order=name.asc'),
+  raw('clean_records?workspace_id=eq.'+encodeURIComponent(ctx.workspaceId)+'&status=eq.pending_review&order=submitted_at.desc&limit=50')
+ ]);
+ return {members,assignments,sites,lists,pending};
 }
-function statusClass(s){return s==='completed'?'ok':(['pending_review','changes_required','flagged'].includes(s)?'warn':'')}
 async function loadTeam(){
  const panel=document.getElementById('teamPanel');if(!panel||!ctx)return;
  try{
   if(!ctx.teamEnabled){
-   panel.innerHTML='<div class="eyebrow">Team workflow</div><h2>Business & Pro</h2><p class="modal-copy">Team logins, cleaner submissions and manager approval are available on Business and Pro.</p><div class="actions"><button class="btn" type="button" onclick="window.VGCleanSubscription?.renderPlans('teamUpgradeChoices')">View plans</button></div><div id="teamUpgradeChoices"></div>';
+   panel.innerHTML='<div class="eyebrow">Team workflow</div><h2>Business & Pro</h2><p class="modal-copy">Team logins, assignments and manager approval are available on Business and Pro.</p>';
    return;
   }
+  const d=await getTeamData();
   if(!isManager()){
-   const mine=await raw('clean_records?created_by=eq.'+encodeURIComponent(ctx.memberUserId)+'&order=created_at.desc&limit=20');
-   const rows=mine.map(r=>'<div class="row"><div><strong>'+esc(r.checklist_id?'Cleaning record':'Cleaning')+'</strong><small>'+new Date(r.created_at).toLocaleString('en-GB')+'</small></div><span class="status-pill '+statusClass(r.status)+'">'+esc(statusLabel(r.status))+'</span></div>').join('')||'<div class="empty">No cleaning records yet. Start a clean to see your work here.</div>';
-   panel.innerHTML='<div class="eyebrow">Cleaner</div><h2>My work</h2><p class="modal-copy">Submit completed cleans for manager approval. If changes are requested, update the record and submit it again.</p><div class="section"><h3>Recent work</h3><div class="list">'+rows+'</div></div>';
+   const mine=d.assignments.filter(a=>a.cleaner_id===ctx.memberUserId&&a.status!=='completed'&&a.status!=='cancelled');
+   const siteMap=Object.fromEntries(d.sites.map(x=>[x.id,x.site_name])),listMap=Object.fromEntries(d.lists.map(x=>[x.id,x.name]));
+   const rows=mine.map(a=>'<div class="row"><div><strong>'+esc(siteMap[a.site_id]||'Site')+' · '+esc(listMap[a.checklist_id]||'Checklist')+'</strong><small>'+esc(statusLabel(a.status))+' · Due '+esc(dateText(a.due_at))+(a.notes?' · '+esc(a.notes):'')+'</small></div><div class="actions"><button class="btn" type="button" onclick="window.startAssignedClean(\''+a.id+'\')">'+(a.status==='assigned'||a.status==='changes_required'?'Start':'Resume')+'</button></div></div>').join('')||'<div class="empty">No assigned cleans. Your manager can assign work here.</div>';
+   panel.innerHTML='<div class="eyebrow">Cleaner</div><h2>My work</h2><p class="modal-copy">Your assigned cleans appear here. Complete them and submit for manager approval.</p><div class="section"><h3>Assigned cleans</h3><div class="list">'+rows+'</div></div>';
    return;
   }
-  const [members,pending,sites,lists]=await Promise.all([
-   raw('clean_memberships?workspace_id=eq.'+encodeURIComponent(ctx.workspaceId)+'&active=eq.true&order=role.asc,created_at.asc'),
-   raw('clean_records?workspace_id=eq.'+encodeURIComponent(ctx.workspaceId)+'&status=eq.pending_review&order=submitted_at.desc&limit=50'),
-   raw('clean_sites?workspace_id=eq.'+encodeURIComponent(ctx.workspaceId)+'&order=site_name.asc'),
-   raw('clean_checklists?workspace_id=eq.'+encodeURIComponent(ctx.workspaceId)+'&order=name.asc')
-  ]);
-  const memberMap=Object.fromEntries(members.map(m=>[m.user_id,m.display_name||'Team member']));
-  const siteMap=Object.fromEntries(sites.map(x=>[x.id,x.site_name]));
-  const listMap=Object.fromEntries(lists.map(x=>[x.id,x.name]));
-  const memberRows=members.map(m=>'<div class="row"><div><strong>'+esc(m.display_name||'Team member')+'</strong><small>'+esc(m.role)+' · '+esc(m.user_id)+'</small></div><span class="badge">'+(m.active?'Active':'Inactive')+'</span></div>').join('')||'<div class="empty">No team members yet.</div>';
-  const pendingRows=pending.map(r=>{
+  const memberMap=Object.fromEntries(d.members.map(m=>[m.user_id,m.display_name||'Team member']));
+  const siteMap=Object.fromEntries(d.sites.map(x=>[x.id,x.site_name]));
+  const listMap=Object.fromEntries(d.lists.map(x=>[x.id,x.name]));
+  const pendingRows=d.pending.map(r=>{
    const who=memberMap[r.created_by||r.user_id]||'Cleaner';
-   const site=siteMap[r.site_id]||'Site';
-   const list=listMap[r.checklist_id]||'Cleaning checklist';
-   return '<div class="row"><div><strong>'+esc(site)+' · '+esc(list)+'</strong><small>'+esc(who)+' · '+new Date(r.submitted_at||r.created_at).toLocaleString('en-GB')+'</small></div><div class="actions"><button class="btn" type="button" onclick="window.reviewClean(\''+r.id+'\',\'approved\')">Approve</button><button class="btn secondary" type="button" onclick="window.reviewClean(\''+r.id+'\',\'changes_required\')">Request changes</button></div></div>';
+   return '<div class="row"><div><strong>'+esc(siteMap[r.site_id]||'Site')+' · '+esc(listMap[r.checklist_id]||'Cleaning checklist')+'</strong><small>'+esc(who)+' · Submitted '+esc(dateText(r.submitted_at||r.created_at))+'</small></div><div class="actions"><button class="btn" type="button" onclick="window.reviewClean(\''+r.id+'\',\'approved\')">Approve</button><button class="btn secondary" type="button" onclick="window.reviewClean(\''+r.id+'\',\'changes_required\')">Request changes</button></div></div>';
   }).join('')||'<div class="empty">No cleans waiting for approval.</div>';
-  panel.innerHTML='<div class="eyebrow">Workspace</div><h2>'+esc(ctx.workspaceName)+'</h2><div class="stats" style="margin-top:14px"><div class="stat"><b>'+pending.length+'</b><small>Awaiting approval</small></div><div class="stat"><b>'+members.length+'</b><small>Team members</small></div><div class="stat"><b>'+sites.length+'</b><small>Sites</small></div><div class="stat"><b>'+lists.length+'</b><small>Checklists</small></div></div><div class="section"><h3>Pending approval</h3><div class="list">'+pendingRows+'</div></div><div class="section"><h3>Team</h3><div class="actions" style="margin-bottom:10px"><button class="btn" type="button" onclick="window.inviteCleanMember()">+ Add team member</button></div><div class="list">'+memberRows+'</div></div>';
+  const assignmentRows=d.assignments.slice(0,30).map(a=>{
+   const status=a.status==='completed'?'Completed':statusLabel(a.status);
+   return '<div class="row"><div><strong>'+esc(siteMap[a.site_id]||'Site')+' · '+esc(listMap[a.checklist_id]||'Checklist')+'</strong><small>'+esc(memberMap[a.cleaner_id]||'Cleaner')+' · '+esc(status)+' · '+esc(dateText(a.due_at))+'</small></div><button class="btn secondary" type="button" onclick="window.cancelAssignment(\''+a.id+'\')">Cancel</button></div>';
+  }).join('')||'<div class="empty">No assignments yet.</div>';
+  const memberRows=d.members.map(m=>'<div class="row"><div><strong>'+esc(m.display_name||'Team member')+'</strong><small>'+esc(m.role)+'</small></div><span class="badge">'+(m.active?'Active':'Inactive')+'</span></div>').join('');
+  panel.innerHTML='<div class="eyebrow">Workspace</div><h2>'+esc(ctx.workspaceName)+'</h2><div class="stats" style="margin-top:14px"><div class="stat"><b>'+d.pending.length+'</b><small>Awaiting approval</small></div><div class="stat"><b>'+d.assignments.filter(a=>a.status!=='completed').length+'</b><small>Open assignments</small></div><div class="stat"><b>'+d.members.length+'</b><small>Team members</small></div><div class="stat"><b>'+d.sites.length+'</b><small>Sites</small></div></div><div class="section"><h3>Assign a clean</h3><p class="modal-copy">Choose a site, checklist, cleaner and due date.</p><div class="actions"><button class="btn" type="button" onclick="window.openAssignmentForm()">+ Assign clean</button></div></div><div class="section"><h3>Pending approval</h3><div class="list">'+pendingRows+'</div></div><div class="section"><h3>Assignments</h3><div class="list">'+assignmentRows+'</div></div><div class="section"><h3>Team</h3><div class="actions" style="margin-bottom:10px"><button class="btn" type="button" onclick="window.inviteCleanMember()">+ Add team member</button></div><div class="list">'+memberRows+'</div></div>';
  }catch(e){panel.innerHTML='<div class="notice">'+esc(e.message||'Could not load the team.')+'</div>'}
 }
+window.openAssignmentForm=async function(){
+ if(!isManager())return;
+ try{
+  const d=await getTeamData();
+  const cleaners=d.members.filter(m=>m.active&&['cleaner','admin'].includes(m.role));
+  if(!cleaners.length)throw Error('Add a cleaner or admin first, then assign a clean.');
+  if(!d.sites.length)throw Error('Add a site first.');
+  if(!d.lists.length)throw Error('Add a checklist first.');
+  const siteOptions=d.sites.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.customer_name)+' — '+esc(x.site_name)+'</option>').join('');
+  const listOptions=d.lists.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.name)+'</option>').join('');
+  const cleanerOptions=cleaners.map(x=>'<option value="'+esc(x.user_id)+'">'+esc(x.display_name||'Team member')+' ('+esc(x.role)+')</option>').join('');
+  const today=new Date();today.setHours(17,0,0,0);
+  const due=today.toISOString().slice(0,16);
+  window.openFormModal('Assign cleaning', '<div class="form"><label>Site<select id="assignSite">'+siteOptions+'</select></label><label>Checklist<select id="assignChecklist">'+listOptions+'</select></label><label>Cleaner<select id="assignCleaner">'+cleanerOptions+'</select></label><label>Due date & time<input id="assignDue" type="datetime-local" value="'+due+'"></label><label>Instructions / notes<textarea id="assignNotes" placeholder="Optional instructions for the cleaner"></textarea></label><div class="modal-actions"><button class="btn secondary" type="button" onclick="window.closeFormModal()">Cancel</button><button class="btn" type="button" id="saveAssignmentBtn">Assign clean</button></div></div>');
+  document.getElementById('saveAssignmentBtn').onclick=async()=>{
+   const b=document.getElementById('saveAssignmentBtn');b.disabled=true;b.textContent='Assigning…';
+   try{
+    const s=session();const dueValue=document.getElementById('assignDue')?.value;
+    await raw('clean_assignments',{method:'POST',body:JSON.stringify({workspace_id:ctx.workspaceId,site_id:document.getElementById('assignSite').value,checklist_id:document.getElementById('assignChecklist').value,cleaner_id:document.getElementById('assignCleaner').value,created_by:s.user.id,due_at:dueValue?new Date(dueValue).toISOString():null,notes:document.getElementById('assignNotes').value.trim()||null})});
+    window.closeFormModal();await loadTeam();
+   }catch(e){alert(e.message||'Could not assign the clean.');b.disabled=false;b.textContent='Assign clean'}
+  };
+ }catch(e){alert(e.message||'Could not open assignment form.')}
+};
+window.cancelAssignment=async function(id){
+ if(!isManager()||!confirm('Cancel this assignment?'))return;
+ try{await raw('clean_assignments?id=eq.'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({status:'cancelled'})});await loadTeam()}catch(e){alert(e.message||'Could not cancel assignment.')}
+};
+window.startAssignedClean=async function(id){
+ if(!ctx)return;
+ try{
+  const a=(await raw('clean_assignments?id=eq.'+encodeURIComponent(id)+'&limit=1'))?.[0];
+  if(!a)throw Error('Assignment not found.');
+  const data=await window.loadAll();
+  await window.openCleanStartModal(data.sites,data.checklists,a.site_id,a.checklist_id,ctx.displayName||'');
+  const hidden=document.createElement('input');hidden.type='hidden';hidden.id='assignmentId';hidden.value=a.id;document.getElementById('formModalBody')?.appendChild(hidden);
+ }catch(e){alert(e.message||'Could not open assigned clean.')}
+};
 window.showTeamTab=async function(){
- ensureTeamTab();document.querySelectorAll('.tabpage').forEach(x=>x.classList.add('hidden'));
- document.getElementById('team')?.classList.remove('hidden');
+ ensureTeamTab();document.querySelectorAll('.tabpage').forEach(x=>x.classList.add('hidden'));document.getElementById('team')?.classList.remove('hidden');
  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab==='team'));
  document.getElementById('pageTitle').textContent=isManager()?'Team & approvals':'My work';
- document.getElementById('subTitle').textContent=isManager()?'Manage your team and approve submitted cleans.':'Complete your assigned cleans and submit them for approval.';
+ document.getElementById('subTitle').textContent=isManager()?'Assign cleans, manage your team and approve submissions.':'Complete assigned cleans and submit them for approval.';
  await loadTeam();
 };
 window.inviteCleanMember=async function(){
@@ -131,38 +158,12 @@ window.reviewClean=async function(recordId,decision){
  try{
   const s=session();
   await raw('clean_reviews',{method:'POST',body:JSON.stringify({workspace_id:ctx.workspaceId,record_id:recordId,reviewer_id:s.user.id,decision,notes})});
-  const patch=decision==='approved'
-   ? {status:'completed',reviewed_by:s.user.id,reviewed_at:new Date().toISOString(),review_notes:notes||null,completed_at:new Date().toISOString()}
-   : {status:'changes_required',reviewed_by:s.user.id,reviewed_at:new Date().toISOString(),review_notes:notes||null};
+  const patch=decision==='approved'?{status:'completed',reviewed_by:s.user.id,reviewed_at:new Date().toISOString(),review_notes:notes||null,completed_at:new Date().toISOString()}:{status:'changes_required',reviewed_by:s.user.id,reviewed_at:new Date().toISOString(),review_notes:notes||null};
   await raw('clean_records?id=eq.'+encodeURIComponent(recordId),{method:'PATCH',body:JSON.stringify(patch)});
-  alert(decision==='approved'?'Clean approved.':'Changes requested.');
-  await loadTeam();if(window.loadAll)await window.loadAll();
+  alert(decision==='approved'?'Clean approved.':'Changes requested.');await loadTeam();if(window.loadAll)await window.loadAll();
  }catch(e){alert(e.message||'Could not review the clean.')}
 };
-function patchCompletion(){
- if(bootPatched||!ctx||ctx.role!=='cleaner'||!window.completeRecord)return;
- if(!originalCompleteRecord)originalCompleteRecord=window.completeRecord;
- bootPatched=true;
- window.completeRecord=async function(id){
-   await originalCompleteRecord(id);
-   try{
-     await raw('clean_records?id=eq.'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({status:'pending_review',submitted_at:new Date().toISOString(),completed_by:ctx.memberUserId,reviewed_by:null,reviewed_at:null,review_notes:null,completed_at:null})});
-     const body=document.getElementById('runnerBody');
-     if(body)body.innerHTML='<div class="notice">Clean submitted for manager approval.</div><div class="actions"><button class="btn secondary" type="button" onclick="window.showTab(\'records\')">Back to records</button></div>';
-     await window.loadAll?.();
-   }catch(e){alert(e.message||'Could not submit the clean for review.')}
- };
-}
-async function initialise(){
- const c=await hydrate();
- if(!c)return;
- ensureTeamTab();hideForCleaner();
- if(window.boot&&!bootPatched&&c.role==='cleaner'){
-   // Core boot is explicitly hydrated before loadAll; we only need to wrap completion.
-   patchCompletion();
- }
- if(c.teamEnabled&&isManager()&&document.getElementById('teamPanel'))loadTeam();
-}
-window.VGCleanTeam={hydrate,getContext:()=>ctx,isManager,isOwner,isTeam};
+async function initialise(){const c=await hydrate();if(!c)return;ensureTeamTab();hideForCleaner();if(c.teamEnabled&&isManager()&&document.getElementById('teamPanel'))loadTeam();}
+window.VGCleanTeam={hydrate,getContext:()=>ctx,isManager,isTeam};
 window.addEventListener('load',()=>setTimeout(initialise,50));
 })();
