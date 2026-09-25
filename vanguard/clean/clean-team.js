@@ -32,7 +32,7 @@ async function hydrate(){
  }catch(e){console.warn('Clean team context unavailable',e);return null}
 }
 function isTeam(){return !!ctx&&['admin','cleaner'].includes(ctx.role)}
-function isManager(){return !!ctx&&['owner','admin'].includes(ctx.role)}
+function isManager(){return !!ctx&&ctx.teamEnabled&&['owner','admin'].includes(ctx.role)}
 function ensureTeamTab(){
  const tabs=document.querySelector('.tabs');if(!tabs||!isTeam()||document.getElementById('teamTab'))return;
  const b=document.createElement('button');b.className='tab';b.dataset.tab='team';b.id='teamTab';b.textContent=isManager()?'Team':'My work';
