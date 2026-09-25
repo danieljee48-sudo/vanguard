@@ -26,7 +26,7 @@ exports.handler = async (event) => {
     const secret = process.env.STRIPE_SECRET_KEY;
     if (!secret) throw new Error('Stripe is not configured');
     const user=await authenticatedUser(event);
-    if(!user?.id)return json(401,{error:'Please sign in again before starting your trial.'});
+    if(!user?.id)return json(401,{error:'Please sign in again before upgrading.'});
     const stripe = Stripe(secret);
     const body = JSON.parse(event.body || '{}');
     const yearly = body.priceType === 'yearly';
@@ -40,7 +40,7 @@ exports.handler = async (event) => {
       payment_method_collection: 'always',
       customer_email: user.email || undefined,
       client_reference_id: user.id,
-      subscription_data: { trial_period_days: 14, metadata: { product:'vanguard-clean', user_id:user.id, plan } },
+      subscription_data: { metadata: { product:'vanguard-clean', user_id:user.id, plan } },
       metadata: { product:'vanguard-clean', user_id:user.id, plan },
       success_url: `${process.env.URL || 'https://vanguardapp.co.uk'}/clean/app?checkout=success`,
       cancel_url: `${process.env.URL || 'https://vanguardapp.co.uk'}/clean/app?checkout=cancelled`
